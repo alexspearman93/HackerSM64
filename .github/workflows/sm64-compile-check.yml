@@ -1,0 +1,31 @@
+name: HackerSM64 compile checks
+
+on:
+  push:
+    branches: [mario-fireball-gun]
+  workflow_dispatch:
+
+jobs:
+  toolchain-check:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install cross-compiler dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y binutils-mips-linux-gnu gcc-mips-linux-gnu build-essential python3 libcapstone-dev pkgconf bsdextrautils
+      - name: Check cross-compiler
+        run: |
+          mips-linux-gnu-gcc --version
+          mips-linux-gnu-ld --version
+      - name: Verify base ROM stays private
+        run: |
+          if git ls-files | grep -E '(^|/)(baserom[^/]*\.(z64|n64|v64)|sm64\.z64)$'; then
+            echo "A ROM was tracked in git. Remove it from the repository."
+            exit 1
+          fi
+      - name: Inspect build options
+        run: make print-CROSS
