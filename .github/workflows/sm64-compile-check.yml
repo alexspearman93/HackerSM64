@@ -29,3 +29,11 @@ jobs:
           fi
       - name: Inspect build options
         run: make print-CROSS
+
+      - name: Compile Mario source (ROM-free syntax check)
+        run: |
+          mips-linux-gnu-gcc -fsyntax-only -std=gnu99 \
+            -I. -Iinclude -Iinclude/n64 -Isrc \
+            -DVERSION_US=1 -DNO_ERRNO_H=1 \
+            -DF3DZEX_NON_GBI_2=1 -DF3DEX_GBI_2=1 -DF3DEX_GBI_SHARED=1 \
+            src/game/mario.c
