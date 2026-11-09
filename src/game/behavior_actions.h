@@ -512,6 +512,8 @@ void bhv_haunted_bookshelf_manager_loop(void);
 void bhv_book_switch_loop(void);
 void bhv_fire_piranha_plant_init(void);
 void bhv_fire_piranha_plant_update(void);
+void bhv_mario_fireball_init(void);
+void bhv_mario_fireball_loop(void);
 void bhv_moving_flame_loop(void);
 void bhv_moving_flame_particle_loop(void);
 void bhv_fire_spitter_update(void);

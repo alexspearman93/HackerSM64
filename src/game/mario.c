@@ -1705,6 +1705,40 @@ static void queue_rumble_particles(struct MarioState *m) {
 /**
  * Main function for executing Mario's behavior. Returns particleFlags.
  */
+
+/*
+ * Mario fireball gun: D-pad right shoots without replacing B-button actions.
+ * One projectile per press, with a short cooldown to avoid object overload.
+ */
+static s32 sMarioFireballCooldown = 0;
+
+static void mario_fireball_gun_update(struct MarioState *m) {
+    struct Object *fireball;
+    u32 group = m->action & ACT_GROUP_MASK;
+
+    if (sMarioFireballCooldown > 0) {
+        sMarioFireballCooldown--;
+    }
+    if (!(m->controller->buttonPressed & R_JPAD) || sMarioFireballCooldown != 0
+        || group == ACT_GROUP_CUTSCENE || group == ACT_GROUP_AUTOMATIC
+        || group == ACT_GROUP_OBJECT || m->health < 0x100) {
+        return;
+    }
+
+    fireball = spawn_object(m->marioObj, MODEL_RED_FLAME, bhvMarioFireball);
+    if (fireball == NULL) {
+        return;
+    }
+    fireball->oPosX = m->pos[0] + sins(m->faceAngle[1]) * 120.0f;
+    fireball->oPosY = m->pos[1] + 95.0f;
+    fireball->oPosZ = m->pos[2] + coss(m->faceAngle[1]) * 120.0f;
+    fireball->oMoveAngleYaw = m->faceAngle[1];
+    fireball->oFaceAngleYaw = m->faceAngle[1];
+    fireball->oForwardVel = 55.0f;
+    fireball->oVelY = 0.0f;
+    sMarioFireballCooldown = 8;
+}
+
 s32 execute_mario_action(UNUSED struct Object *obj) {
     s32 inLoop = TRUE;
 
@@ -1741,6 +1775,7 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
         gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         mario_reset_bodystate(gMarioState);
         update_mario_inputs(gMarioState);
+        mario_fireball_gun_update(gMarioState);
 
 #ifdef PUPPYCAM
         if (!(gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_FREE)) {

@@ -5743,6 +5743,16 @@ const BehaviorScript bhvFirePiranhaPlant[] = {
     END_LOOP(),
 };
 
+const BehaviorScript bhvMarioFireball[] = {
+    BEGIN(OBJ_LIST_GENACTOR),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    BILLBOARD(),
+    CALL_NATIVE(bhv_mario_fireball_init),
+    BEGIN_LOOP(),
+        CALL_NATIVE(bhv_mario_fireball_loop),
+    END_LOOP(),
+};
+
 const BehaviorScript bhvMovingFlame[] = {
     BEGIN(OBJ_LIST_GENACTOR),
     OR_INT(oFlags, (OBJ_FLAG_COMPUTE_ANGLE_TO_MARIO | OBJ_FLAG_COMPUTE_DIST_TO_MARIO | OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE)),
