@@ -18,3 +18,15 @@ The script verifies the known US ROM SHA-1, refuses a Git-tracked base ROM, buil
 - Unattended full builds: **not yet configured**. GitHub-hosted runners cannot read a private file in a Codespace. A future solution needs an access-controlled ROM source and private artifact destination (or an appropriately secured persistent runner). Do not attach a self-hosted runner to an untrusted public-repository workflow.
 
 This file documents the safe initial bridge without adding external paid services or exposing ROM bytes.
+
+## Automatic local builds while Codespace is running
+
+After the initial successful build, run `git pull --ff-only` and then:
+
+```bash
+bash scripts/watch-private-builds.sh
+```
+
+The watcher checks `origin/mario-fireball-gun` every 90 seconds, fast-forwards only when there are no tracked local edits, and runs the private build script for new commits. A successful build is copied to `.private-build/sm64-latest.z64` and its commit ID is recorded in `.private-build/sm64-latest.commit`. ROM files remain ignored by Git; no ROM is uploaded. Stop with Ctrl+C.
+
+**Limitations:** the terminal session and Codespace must remain running, and the watcher does not send notifications or deliver the ROM to the phone. It is an interim local automation, not an unattended cloud CI pipeline. Do not publish the resulting ROM or the base ROM as public GitHub Actions artifacts.
