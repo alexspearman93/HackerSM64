@@ -20,7 +20,7 @@ def build():
         STATE.update(status="fetching", message="Fetching private base ROM")
         req = urllib.request.Request(
             "https://hackersm64-private-upload.alexspearman93-cb2.workers.dev/private/base-rom",
-            headers={"Authorization": "Bearer " + token},
+            headers={"Authorization": "Bearer " + token, "User-Agent": "HackerSM64-Render-Builder/1.0"},
         )
         with urllib.request.urlopen(req, timeout=35) as response:
             data = response.read(8388609)
