@@ -5,6 +5,7 @@ import os
 import subprocess
 import threading
 import urllib.request
+import urllib.error
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 STATE = {"status": "waiting", "rom_build": False, "rom_uploaded": False, "message": "Build not started"}
@@ -39,6 +40,9 @@ def build():
                 tail = log.readlines()[-12:]
             raise RuntimeError("Build failed: " + "".join(tail)[-900:])
         STATE.update(status="built", rom_build=True, message="Full ROM compilation succeeded; private delivery not yet enabled")
+    except urllib.error.HTTPError as exc:
+        detail = exc.read(500).decode('utf-8', 'replace')
+        STATE.update(status="failed", message=f"HTTP {exc.code}; server={exc.headers.get('Server')}; cf-ray={exc.headers.get('cf-ray')}; content-type={exc.headers.get('Content-Type')}; body={detail[:250]}")
     except Exception as exc:
         STATE.update(status="failed", message=str(exc)[:1200])
     finally:
