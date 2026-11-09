@@ -39,7 +39,29 @@ def build():
             with open("/tmp/hackersm64-build.log", errors="replace") as log:
                 tail = log.readlines()[-12:]
             raise RuntimeError("Build failed: " + "".join(tail)[-900:])
-        STATE.update(status="built", rom_build=True, message="Full ROM compilation succeeded; private delivery not yet enabled")
+        STATE.update(status="uploading", rom_build=True, message="Uploading finished ROM to private R2")
+        with open(output, "rb") as compiled:
+            built_rom = compiled.read()
+        if not (1048576 <= len(built_rom) <= 33554432):
+            raise ValueError("Unexpected compiled ROM size")
+        upload_request = urllib.request.Request(
+            "https://hackersm64-private-upload.alexspearman93-cb2.workers.dev/private/build",
+            data=built_rom,
+            method="PUT",
+            headers={
+                "Authorization": "Bearer " + token,
+                "User-Agent": "HackerSM64-Render-Builder/1.0",
+                "Content-Type": "application/octet-stream",
+            },
+        )
+        with urllib.request.urlopen(upload_request, timeout=90) as response:
+            uploaded = json.load(response)
+        if not uploaded.get("download_url"):
+            raise RuntimeError("Private upload did not return a download link")
+        # The link is a bearer credential: never publish it on the public /health endpoint.
+        print("PRIVATE_BUILD_DOWNLOAD_URL=" + uploaded["download_url"], flush=True)
+        print("PRIVATE_BUILD_EXPIRES_AT=" + uploaded["expires_at"], flush=True)
+        STATE.update(status="built", rom_build=True, message="Full ROM compiled and stored privately; download link available in private Render logs")
     except urllib.error.HTTPError as exc:
         detail = exc.read(500).decode('utf-8', 'replace')
         STATE.update(status="failed", message=f"HTTP {exc.code}; server={exc.headers.get('Server')}; cf-ray={exc.headers.get('cf-ray')}; content-type={exc.headers.get('Content-Type')}; body={detail[:250]}")
