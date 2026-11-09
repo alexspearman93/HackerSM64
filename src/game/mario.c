@@ -1769,7 +1769,7 @@ static void mario_fireball_gun_update(struct MarioState *m) {
     }
 
     /* A globally loaded particle makes a small, bright temporary bullet. */
-    bullet = spawn_object(m->marioObj, MODEL_WHITE_PARTICLE_SMALL, bhvMarioFireball);
+    bullet = spawn_object(m->marioObj, MODEL_MARIO_PISTOL_BULLET, bhvMarioFireball);
     if (bullet == NULL) {
         return;
     }

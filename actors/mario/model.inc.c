@@ -6791,3 +6791,106 @@ const Gfx mario_metal_cap_wings_transparent[] = {
     gsSPTexture(0x07C0, 0x0F80, 0, G_TX_RENDERTILE, G_ON),
     gsSPEndDisplayList(),
 };
+
+
+/* Original low-poly matte-black pistol and dark bullet, no external assets. */
+static const Vtx mario_pistol_slide_vtx[] = {
+    {{{-10, 0, -9}, 0, {0, 0}, {39, 43, 50, 255}},
+    {{{12, 0, -9}, 0, {0, 0}, {39, 43, 50, 255}},
+    {{{12, 17, -9}, 0, {0, 0}, {39, 43, 50, 255}},
+    {{{-10, 17, -9}, 0, {0, 0}, {39, 43, 50, 255}},
+    {{{-10, 0, 38}, 0, {0, 0}, {39, 43, 50, 255}},
+    {{{12, 0, 38}, 0, {0, 0}, {39, 43, 50, 255}},
+    {{{12, 17, 38}, 0, {0, 0}, {39, 43, 50, 255}},
+    {{{-10, 17, 38}, 0, {0, 0}, {39, 43, 50, 255}},
+};
+static const Gfx mario_pistol_slide_dl[] = {
+    gsSPVertex(mario_pistol_slide_vtx, 8, 0),
+    gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+    gsSP2Triangles(4, 6, 5, 0, 4, 7, 6, 0),
+    gsSP2Triangles(0, 4, 5, 0, 0, 5, 1, 0),
+    gsSP2Triangles(3, 2, 6, 0, 3, 6, 7, 0),
+    gsSP2Triangles(0, 3, 7, 0, 0, 7, 4, 0),
+    gsSP2Triangles(1, 5, 6, 0, 1, 6, 2, 0),
+    gsSPEndDisplayList(),
+};
+static const Vtx mario_pistol_barrel_vtx[] = {
+    {{{-7, 3, 37}, 0, {0, 0}, {18, 21, 25, 255}},
+    {{{9, 3, 37}, 0, {0, 0}, {18, 21, 25, 255}},
+    {{{9, 13, 37}, 0, {0, 0}, {18, 21, 25, 255}},
+    {{{-7, 13, 37}, 0, {0, 0}, {18, 21, 25, 255}},
+    {{{-7, 3, 62}, 0, {0, 0}, {18, 21, 25, 255}},
+    {{{9, 3, 62}, 0, {0, 0}, {18, 21, 25, 255}},
+    {{{9, 13, 62}, 0, {0, 0}, {18, 21, 25, 255}},
+    {{{-7, 13, 62}, 0, {0, 0}, {18, 21, 25, 255}},
+};
+static const Gfx mario_pistol_barrel_dl[] = {
+    gsSPVertex(mario_pistol_barrel_vtx, 8, 0),
+    gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+    gsSP2Triangles(4, 6, 5, 0, 4, 7, 6, 0),
+    gsSP2Triangles(0, 4, 5, 0, 0, 5, 1, 0),
+    gsSP2Triangles(3, 2, 6, 0, 3, 6, 7, 0),
+    gsSP2Triangles(0, 3, 7, 0, 0, 7, 4, 0),
+    gsSP2Triangles(1, 5, 6, 0, 1, 6, 2, 0),
+    gsSPEndDisplayList(),
+};
+static const Vtx mario_pistol_grip_vtx[] = {
+    {{{-7, -25, 0}, 0, {0, 0}, {58, 62, 67, 255}},
+    {{{9, -25, 0}, 0, {0, 0}, {58, 62, 67, 255}},
+    {{{9, 2, 0}, 0, {0, 0}, {58, 62, 67, 255}},
+    {{{-7, 2, 0}, 0, {0, 0}, {58, 62, 67, 255}},
+    {{{-7, -25, 19}, 0, {0, 0}, {58, 62, 67, 255}},
+    {{{9, -25, 19}, 0, {0, 0}, {58, 62, 67, 255}},
+    {{{9, 2, 19}, 0, {0, 0}, {58, 62, 67, 255}},
+    {{{-7, 2, 19}, 0, {0, 0}, {58, 62, 67, 255}},
+};
+static const Gfx mario_pistol_grip_dl[] = {
+    gsSPVertex(mario_pistol_grip_vtx, 8, 0),
+    gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+    gsSP2Triangles(4, 6, 5, 0, 4, 7, 6, 0),
+    gsSP2Triangles(0, 4, 5, 0, 0, 5, 1, 0),
+    gsSP2Triangles(3, 2, 6, 0, 3, 6, 7, 0),
+    gsSP2Triangles(0, 3, 7, 0, 0, 7, 4, 0),
+    gsSP2Triangles(1, 5, 6, 0, 1, 6, 2, 0),
+    gsSPEndDisplayList(),
+};
+static const Vtx mario_pistol_bullet_vtx[] = {
+    {{{-5, -5, -5}, 0, {0, 0}, {29, 32, 37, 255}},
+    {{{5, -5, -5}, 0, {0, 0}, {29, 32, 37, 255}},
+    {{{5, 5, -5}, 0, {0, 0}, {29, 32, 37, 255}},
+    {{{-5, 5, -5}, 0, {0, 0}, {29, 32, 37, 255}},
+    {{{-5, -5, 5}, 0, {0, 0}, {29, 32, 37, 255}},
+    {{{5, -5, 5}, 0, {0, 0}, {29, 32, 37, 255}},
+    {{{5, 5, 5}, 0, {0, 0}, {29, 32, 37, 255}},
+    {{{-5, 5, 5}, 0, {0, 0}, {29, 32, 37, 255}},
+};
+static const Gfx mario_pistol_bullet_cube_dl[] = {
+    gsSPVertex(mario_pistol_bullet_vtx, 8, 0),
+    gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+    gsSP2Triangles(4, 6, 5, 0, 4, 7, 6, 0),
+    gsSP2Triangles(0, 4, 5, 0, 0, 5, 1, 0),
+    gsSP2Triangles(3, 2, 6, 0, 3, 6, 7, 0),
+    gsSP2Triangles(0, 3, 7, 0, 0, 7, 4, 0),
+    gsSP2Triangles(1, 5, 6, 0, 1, 6, 2, 0),
+    gsSPEndDisplayList(),
+};
+const Gfx mario_pistol_dl[] = {
+    gsDPPipeSync(),
+    gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPDisplayList(mario_pistol_slide_dl),
+    gsSPDisplayList(mario_pistol_barrel_dl),
+    gsSPDisplayList(mario_pistol_grip_dl),
+    gsDPPipeSync(),
+    gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+    gsSPEndDisplayList(),
+};
+const Gfx mario_pistol_bullet_dl[] = {
+    gsDPPipeSync(),
+    gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPDisplayList(mario_pistol_bullet_cube_dl),
+    gsDPPipeSync(),
+    gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+    gsSPEndDisplayList(),
+};
