@@ -39,7 +39,7 @@
 /**
  * Enables "parallel lakitu camera" or "aglab cam" which lets you move the camera smoothly with the D-pad.
  */
-#define PARALLEL_LAKITU_CAM
+// #define PARALLEL_LAKITU_CAM // Fireball gun owns D-pad Right
 
 /**
  * Enables Puppy Camera 2, a rewritten camera that can be freely configured and modified.

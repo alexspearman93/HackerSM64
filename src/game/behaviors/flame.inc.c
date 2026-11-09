@@ -91,11 +91,14 @@ void bhv_mario_fireball_loop(void) {
     /* Check collision candidates. Do not attack Mario or the projectile itself. */
     for (i = 0; i < o->numCollidedObjs; i++) {
         target = o->collidedObjs[i];
-        if (target == NULL || target == gMarioObject || target == o) {
+        if (target == NULL || target == gMarioObject || target == o
+            || target->oInteractType == INTERACT_NONE
+            || target->oInteractType == INTERACT_COIN
+            || target->oInteractType == INTERACT_STAR_OR_KEY) {
             continue;
         }
         /* Trigger the enemy's standard attacked status, preserving its death logic. */
-        target->oInteractStatus |= INT_STATUS_INTERACTED | INT_STATUS_WAS_ATTACKED;
+        target->oInteractStatus |= INT_STATUS_INTERACTED | INT_STATUS_WAS_ATTACKED | INT_KICK;
         obj_mark_for_deletion(o);
         return;
     }
