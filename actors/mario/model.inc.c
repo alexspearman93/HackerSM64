@@ -6874,6 +6874,101 @@ static const Gfx mario_pistol_bullet_cube_dl[] = {
     gsSP2Triangles(1, 5, 6, 0, 1, 6, 2, 0),
     gsSPEndDisplayList(),
 };
+
+/* TEMPORARY pistol orientation calibration: RGB axes from model origin; yellow muzzle (+Z). */
+static const Vtx mario_cal_axis_x_vtx[] = {
+    {{{0, -3, -3}, 0, {0, 0}, {255, 25, 25, 255}}},
+    {{{85, -3, -3}, 0, {0, 0}, {255, 25, 25, 255}}},
+    {{{85, 3, -3}, 0, {0, 0}, {255, 25, 25, 255}}},
+    {{{0, 3, -3}, 0, {0, 0}, {255, 25, 25, 255}}},
+    {{{0, -3, 3}, 0, {0, 0}, {255, 25, 25, 255}}},
+    {{{85, -3, 3}, 0, {0, 0}, {255, 25, 25, 255}}},
+    {{{85, 3, 3}, 0, {0, 0}, {255, 25, 25, 255}}},
+    {{{0, 3, 3}, 0, {0, 0}, {255, 25, 25, 255}}},
+};
+static const Gfx mario_cal_axis_x_dl[] = {
+    gsSPVertex(mario_cal_axis_x_vtx, 8, 0),
+    gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+    gsSP2Triangles(4, 6, 5, 0, 4, 7, 6, 0),
+    gsSP2Triangles(0, 4, 5, 0, 0, 5, 1, 0),
+    gsSP2Triangles(3, 2, 6, 0, 3, 6, 7, 0),
+    gsSP2Triangles(0, 3, 7, 0, 0, 7, 4, 0),
+    gsSP2Triangles(1, 5, 6, 0, 1, 6, 2, 0),
+    gsSPEndDisplayList(),
+};
+static const Vtx mario_cal_axis_y_vtx[] = {
+    {{{-3, 0, -3}, 0, {0, 0}, {20, 255, 35, 255}}},
+    {{{3, 0, -3}, 0, {0, 0}, {20, 255, 35, 255}}},
+    {{{3, 85, -3}, 0, {0, 0}, {20, 255, 35, 255}}},
+    {{{-3, 85, -3}, 0, {0, 0}, {20, 255, 35, 255}}},
+    {{{-3, 0, 3}, 0, {0, 0}, {20, 255, 35, 255}}},
+    {{{3, 0, 3}, 0, {0, 0}, {20, 255, 35, 255}}},
+    {{{3, 85, 3}, 0, {0, 0}, {20, 255, 35, 255}}},
+    {{{-3, 85, 3}, 0, {0, 0}, {20, 255, 35, 255}}},
+};
+static const Gfx mario_cal_axis_y_dl[] = {
+    gsSPVertex(mario_cal_axis_y_vtx, 8, 0),
+    gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+    gsSP2Triangles(4, 6, 5, 0, 4, 7, 6, 0),
+    gsSP2Triangles(0, 4, 5, 0, 0, 5, 1, 0),
+    gsSP2Triangles(3, 2, 6, 0, 3, 6, 7, 0),
+    gsSP2Triangles(0, 3, 7, 0, 0, 7, 4, 0),
+    gsSP2Triangles(1, 5, 6, 0, 1, 6, 2, 0),
+    gsSPEndDisplayList(),
+};
+static const Vtx mario_cal_axis_z_vtx[] = {
+    {{{-3, -3, 0}, 0, {0, 0}, {30, 90, 255, 255}}},
+    {{{3, -3, 0}, 0, {0, 0}, {30, 90, 255, 255}}},
+    {{{3, 3, 0}, 0, {0, 0}, {30, 90, 255, 255}}},
+    {{{-3, 3, 0}, 0, {0, 0}, {30, 90, 255, 255}}},
+    {{{-3, -3, 100}, 0, {0, 0}, {30, 90, 255, 255}}},
+    {{{3, -3, 100}, 0, {0, 0}, {30, 90, 255, 255}}},
+    {{{3, 3, 100}, 0, {0, 0}, {30, 90, 255, 255}}},
+    {{{-3, 3, 100}, 0, {0, 0}, {30, 90, 255, 255}}},
+};
+static const Gfx mario_cal_axis_z_dl[] = {
+    gsSPVertex(mario_cal_axis_z_vtx, 8, 0),
+    gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+    gsSP2Triangles(4, 6, 5, 0, 4, 7, 6, 0),
+    gsSP2Triangles(0, 4, 5, 0, 0, 5, 1, 0),
+    gsSP2Triangles(3, 2, 6, 0, 3, 6, 7, 0),
+    gsSP2Triangles(0, 3, 7, 0, 0, 7, 4, 0),
+    gsSP2Triangles(1, 5, 6, 0, 1, 6, 2, 0),
+    gsSPEndDisplayList(),
+};
+static const Vtx mario_cal_muzzle_vtx[] = {
+    {{{-9, 1, 62}, 0, {0, 0}, {255, 230, 15, 255}}},
+    {{{11, 1, 62}, 0, {0, 0}, {255, 230, 15, 255}}},
+    {{{11, 15, 62}, 0, {0, 0}, {255, 230, 15, 255}}},
+    {{{-9, 15, 62}, 0, {0, 0}, {255, 230, 15, 255}}},
+    {{{-9, 1, 69}, 0, {0, 0}, {255, 230, 15, 255}}},
+    {{{11, 1, 69}, 0, {0, 0}, {255, 230, 15, 255}}},
+    {{{11, 15, 69}, 0, {0, 0}, {255, 230, 15, 255}}},
+    {{{-9, 15, 69}, 0, {0, 0}, {255, 230, 15, 255}}},
+};
+static const Gfx mario_cal_muzzle_dl[] = {
+    gsSPVertex(mario_cal_muzzle_vtx, 8, 0),
+    gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
+    gsSP2Triangles(4, 6, 5, 0, 4, 7, 6, 0),
+    gsSP2Triangles(0, 4, 5, 0, 0, 5, 1, 0),
+    gsSP2Triangles(3, 2, 6, 0, 3, 6, 7, 0),
+    gsSP2Triangles(0, 3, 7, 0, 0, 7, 4, 0),
+    gsSP2Triangles(1, 5, 6, 0, 1, 6, 2, 0),
+    gsSPEndDisplayList(),
+};
+const Gfx mario_pistol_calibration_dl[] = {
+    gsDPPipeSync(),
+    gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
+    gsDPSetCombineMode(G_CC_SHADE, G_CC_SHADE),
+    gsSPDisplayList(mario_cal_axis_x_dl),
+    gsSPDisplayList(mario_cal_axis_y_dl),
+    gsSPDisplayList(mario_cal_axis_z_dl),
+    gsSPDisplayList(mario_cal_muzzle_dl),
+    gsDPPipeSync(),
+    gsSPSetGeometryMode(G_LIGHTING | G_CULL_BACK),
+    gsSPEndDisplayList(),
+};
+
 const Gfx mario_pistol_dl[] = {
     gsDPPipeSync(),
     gsSPClearGeometryMode(G_LIGHTING | G_CULL_BACK),
