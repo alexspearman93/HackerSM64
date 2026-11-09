@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 gcc-mips-linux-gnu binutils-mips-linux-gnu \
+    python3 gcc-mips-linux-gnu binutils-mips-linux-gnu libc6-dev-mips-cross \
     libcapstone-dev pkgconf bsdextrautils build-essential \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
