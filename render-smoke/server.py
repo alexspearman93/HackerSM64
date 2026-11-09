@@ -11,6 +11,34 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 STATE = {"status": "waiting", "rom_build": False, "rom_uploaded": False, "message": "Build not started"}
 EXPECTED = "9bef1128717f958171a4afac3ed78ee2bb4e86ce"
 
+def notify_rom_ready(download_url, expires_at):
+    """Best-effort notification; never fail a successful build over push delivery."""
+    topic = os.environ.get("NTFY_TOPIC", "").strip()
+    if not topic:
+        return
+    try:
+        payload = (
+            "Your HackerSM64 ROM is ready! Tap to download and open in your emulator. "
+            "Link expires: " + expires_at
+        ).encode("utf-8")
+        request = urllib.request.Request(
+            "https://ntfy.sh/" + topic,
+            data=payload,
+            method="POST",
+            headers={
+                "Title": "HackerSM64 ROM ready",
+                "Priority": "high",
+                "Tags": "video_game,white_check_mark",
+                "Click": download_url,
+                "Actions": "view,Download ROM," + download_url,
+                "User-Agent": "HackerSM64-Render-Builder/1.0",
+            },
+        )
+        with urllib.request.urlopen(request, timeout=20) as response:
+            print("NTFY_NOTIFICATION_SENT status=" + str(response.status), flush=True)
+    except Exception as exc:
+        print("NTFY_NOTIFICATION_FAILED " + str(exc)[:200], flush=True)
+
 def build():
     token = os.environ.get("ROM_FETCH_TOKEN")
     if not token:
@@ -61,6 +89,7 @@ def build():
         # The link is a bearer credential: never publish it on the public /health endpoint.
         print("PRIVATE_BUILD_DOWNLOAD_URL=" + uploaded["download_url"], flush=True)
         print("PRIVATE_BUILD_EXPIRES_AT=" + uploaded["expires_at"], flush=True)
+        notify_rom_ready(uploaded["download_url"], uploaded["expires_at"])
         STATE.update(status="built", rom_build=True, message="Full ROM compiled and stored privately; download link available in private Render logs")
     except urllib.error.HTTPError as exc:
         detail = exc.read(500).decode('utf-8', 'replace')
