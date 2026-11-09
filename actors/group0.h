@@ -18,6 +18,7 @@ extern const Gfx burn_smoke_seg4_dl[];
 
 // mario
 extern const Gfx mario_pistol_dl[];
+extern const Gfx mario_pistol_calibration_dl[];
 extern const Gfx mario_pistol_bullet_dl[];
 extern const GeoLayout mario_geo_face_and_wings[];
 extern const GeoLayout mario_geo_left_hand[];
