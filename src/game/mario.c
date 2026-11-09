@@ -1712,8 +1712,46 @@ static void queue_rumble_particles(struct MarioState *m) {
  */
 static s32 sMarioFireballCooldown = 0;
 
+/* Aim only at interactive objects ahead of Mario, never at pickups or Mario. */
+static struct Object *mario_pistol_find_target(struct MarioState *m) {
+    const s32 lists[] = { OBJ_LIST_PUSHABLE, OBJ_LIST_GENACTOR, OBJ_LIST_DESTRUCTIVE };
+    struct Object *best = NULL;
+    f32 bestDistSq = 2200.0f * 2200.0f;
+    s32 listIndex;
+    f32 forwardX = sins(m->faceAngle[1]);
+    f32 forwardZ = coss(m->faceAngle[1]);
+
+    for (listIndex = 0; listIndex < 3; listIndex++) {
+        struct ObjectNode *head = &gObjectLists[lists[listIndex]];
+        struct Object *candidate = (struct Object *) head->next;
+        while (candidate != (struct Object *) head) {
+            f32 dx = candidate->oPosX - m->pos[0];
+            f32 dz = candidate->oPosZ - m->pos[2];
+            f32 dy = candidate->oPosY - m->pos[1];
+            f32 forward = dx * forwardX + dz * forwardZ;
+            f32 side = dx * forwardZ - dz * forwardX;
+            f32 distSq = dx * dx + dz * dz;
+
+            if (candidate != m->marioObj && candidate->activeFlags != ACTIVE_FLAG_DEACTIVATED
+                && candidate->oInteractType != INTERACT_NONE
+                && candidate->oInteractType != INTERACT_COIN
+                && candidate->oInteractType != INTERACT_STAR_OR_KEY
+                && candidate->oInteractType != INTERACT_WARP
+                && forward > 80.0f && side * side < forward * forward * 0.36f
+                && dy > -300.0f && dy < 350.0f && distSq < bestDistSq) {
+                bestDistSq = distSq;
+                best = candidate;
+            }
+            candidate = (struct Object *) candidate->header.next;
+        }
+    }
+    return best;
+}
+
 static void mario_fireball_gun_update(struct MarioState *m) {
-    struct Object *fireball;
+    struct Object *bullet;
+    struct Object *target;
+    s16 yaw = m->faceAngle[1];
     u32 group = m->action & ACT_GROUP_MASK;
 
     if (sMarioFireballCooldown > 0) {
@@ -1725,18 +1763,24 @@ static void mario_fireball_gun_update(struct MarioState *m) {
         return;
     }
 
-    fireball = spawn_object(m->marioObj, MODEL_RED_FLAME, bhvMarioFireball);
-    if (fireball == NULL) {
+    target = mario_pistol_find_target(m);
+    if (target != NULL) {
+        yaw = atan2s(target->oPosZ - m->pos[2], target->oPosX - m->pos[0]);
+    }
+
+    /* A globally loaded particle makes a small, bright temporary bullet. */
+    bullet = spawn_object(m->marioObj, MODEL_WHITE_PARTICLE_SMALL, bhvMarioFireball);
+    if (bullet == NULL) {
         return;
     }
-    fireball->oPosX = m->pos[0] + sins(m->faceAngle[1]) * 120.0f;
-    fireball->oPosY = m->pos[1] + 95.0f;
-    fireball->oPosZ = m->pos[2] + coss(m->faceAngle[1]) * 120.0f;
-    fireball->oMoveAngleYaw = m->faceAngle[1];
-    fireball->oFaceAngleYaw = m->faceAngle[1];
-    fireball->oForwardVel = 55.0f;
-    fireball->oVelY = 0.0f;
-    sMarioFireballCooldown = 8;
+    bullet->oPosX = m->pos[0] + sins(yaw) * 95.0f;
+    bullet->oPosY = m->pos[1] + 65.0f;
+    bullet->oPosZ = m->pos[2] + coss(yaw) * 95.0f;
+    bullet->oMoveAngleYaw = yaw;
+    bullet->oFaceAngleYaw = yaw;
+    bullet->oForwardVel = 85.0f;
+    bullet->oVelY = 0.0f;
+    sMarioFireballCooldown = 7;
 }
 
 s32 execute_mario_action(UNUSED struct Object *obj) {

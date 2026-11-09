@@ -53,22 +53,22 @@ void bhv_moving_flame_particle_loop(void) {
     cur_obj_scale(o->header.gfx.scale[0]);
 }
 
-/* Player-fired flame: move forward, burn enemies, expire on impact or timeout. */
+/* Mario's pistol projectile. Reuses the verified destructive collision behavior. */
 static struct ObjectHitbox sMarioFireballHitbox = {
     /* interactType:      */ INTERACT_NONE,
     /* downOffset:        */ 0,
     /* damageOrCoinValue: */ 1,
     /* health:            */ 0,
     /* numLootCoins:      */ 0,
-    /* radius:            */ 55,
-    /* height:            */ 75,
-    /* hurtboxRadius:     */ 55,
-    /* hurtboxHeight:     */ 75,
+    /* radius:            */ 45,
+    /* height:            */ 90,
+    /* hurtboxRadius:     */ 45,
+    /* hurtboxHeight:     */ 90,
 };
 
 void bhv_mario_fireball_init(void) {
     obj_set_hitbox(o, &sMarioFireballHitbox);
-    cur_obj_scale(2.0f);
+    cur_obj_scale(2.5f);
     o->oGravity = 0.0f;
     o->oBuoyancy = 0.0f;
 }
@@ -78,17 +78,14 @@ void bhv_mario_fireball_loop(void) {
     struct Object *target;
     f32 dx, dy, dz;
 
-    /* N64 runs at 30 fps; 32 frames gives roughly a one-second lifetime. */
-    if (o->oTimer > 32) {
+    if (o->oTimer > 28) {
         obj_mark_for_deletion(o);
         return;
     }
 
     o->oPosX += sins(o->oMoveAngleYaw) * o->oForwardVel;
     o->oPosZ += coss(o->oMoveAngleYaw) * o->oForwardVel;
-    o->oAnimState += 1;
 
-    /* Check collision candidates. Do not attack Mario or the projectile itself. */
     for (i = 0; i < o->numCollidedObjs; i++) {
         target = o->collidedObjs[i];
         if (target == NULL || target == gMarioObject || target == o
@@ -97,22 +94,19 @@ void bhv_mario_fireball_loop(void) {
             || target->oInteractType == INTERACT_STAR_OR_KEY) {
             continue;
         }
-        /* Trigger the enemy's standard attacked status, preserving its death logic. */
         target->oInteractStatus |= INT_STATUS_INTERACTED | INT_STATUS_WAS_ATTACKED | INT_KICK;
         obj_mark_for_deletion(o);
         return;
     }
 
-    /* Simple floor/wall checks without requiring a full moving-object physics step. */
     if (o->oPosY < find_floor_height(o->oPosX, o->oPosY + 100.0f, o->oPosZ)) {
         obj_mark_for_deletion(o);
         return;
     }
-    /* Cull if far from Mario to avoid stray objects consuming memory. */
     dx = o->oPosX - gMarioObject->oPosX;
     dy = o->oPosY - gMarioObject->oPosY;
     dz = o->oPosZ - gMarioObject->oPosZ;
-    if (dx * dx + dy * dy + dz * dz > 4000000.0f) {
+    if (dx * dx + dy * dy + dz * dz > 6250000.0f) {
         obj_mark_for_deletion(o);
     }
 }
