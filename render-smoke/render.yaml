@@ -1,0 +1,11 @@
+# Experimental ROM-free Render test. Deploy only as a Free web service.
+# No ROM files or secrets are used. Auto-deploy disabled to conserve free minutes.
+services:
+  - type: web
+    name: hackersm64-compiler-smoke
+    runtime: docker
+    plan: free
+    dockerfilePath: ./render-smoke/Dockerfile
+    dockerContext: .
+    autoDeploy: false
+    healthCheckPath: /health
