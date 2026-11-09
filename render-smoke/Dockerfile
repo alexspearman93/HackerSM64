@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libcapstone-dev pkgconf bsdextrautils build-essential \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
+ENV PATH="/app/tools:${PATH}"
 COPY . /app
 RUN mips-linux-gnu-gcc -fsyntax-only -std=gnu99 \
     -I. -Iinclude -Iinclude/n64 -Isrc \
