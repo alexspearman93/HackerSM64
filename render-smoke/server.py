@@ -34,8 +34,24 @@ def notify_rom_ready(download_url, expires_at):
                 "User-Agent": "HackerSM64-Render-Builder/1.0",
             },
         )
-        with urllib.request.urlopen(request, timeout=20) as response:
-            print("NTFY_NOTIFICATION_SENT status=" + str(response.status), flush=True)
+        # Shared cloud egress IPs can hit ntfy.sh's anonymous rate limit.
+        # Honor Retry-After when available, but cap delays to avoid blocking forever.
+        import time
+        for attempt in range(4):
+            try:
+                with urllib.request.urlopen(request, timeout=20) as response:
+                    print("NTFY_NOTIFICATION_SENT status=" + str(response.status), flush=True)
+                    break
+            except urllib.error.HTTPError as exc:
+                if exc.code != 429 or attempt == 3:
+                    raise
+                retry_after = exc.headers.get("Retry-After", "")
+                try:
+                    delay = min(max(int(retry_after), 2), 90)
+                except ValueError:
+                    delay = (10, 30, 60)[attempt]
+                print("NTFY_RATE_LIMITED retry_in_seconds=" + str(delay), flush=True)
+                time.sleep(delay)
     except Exception as exc:
         print("NTFY_NOTIFICATION_FAILED " + str(exc)[:200], flush=True)
 
