@@ -8,14 +8,14 @@ import math, re, pathlib, unittest
 BASE=pathlib.Path(__file__).resolve().parents[2]
 def parse(name):
     source=(BASE/'assets/anims/anim_C5.inc.c').read_text()
-    body=re.search(r'\\b'+name+r'\\[\\]\\s*=\\s*\\{(.*?)\\};',source,re.S).group(1)
-    return [int(n,0) for n in re.findall(r'0x[0-9a-fA-F]+|-?\\d+',body)]
+    body=re.search(r'\b'+name+r'\[\]\s*=\s*\{(.*?)\};',source,re.S).group(1)
+    return [int(n,0) for n in re.findall(r'0x[0-9a-fA-F]+|-?\d+',body)]
 def data():
     v=[n-65536 if n>=32768 else n for n in parse('anim_C5_values')]
     ix=parse('anim_C5_indices')
     source=(BASE/'tools/pistol-alignment/skeleton.generated.c').read_text()
-    parents=list(map(int,re.findall(r'-?\\d+',re.search(r'gSkelParent\\[20\\] = \\{(.*?)\\}',source,re.S).group(1))))
-    offsets=[tuple(map(int,x)) for x in re.findall(r'\\{\\s*(-?\\d+),\\s*(-?\\d+),\\s*(-?\\d+)\\s*\\}',source.split('gSkelOffset')[1])]
+    parents=list(map(int,re.findall(r'-?\d+',re.search(r'gSkelParent\[20\] = \{(.*?)\}',source,re.S).group(1))))
+    offsets=[tuple(map(int,x)) for x in re.findall(r'\{\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\s*\}',source.split('gSkelOffset')[1])]
     assert len(parents)==len(offsets)==20 and len(ix)==126
     def channel(frame,ch):
         count,start=ix[2*ch:2*ch+2]
