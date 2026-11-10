@@ -118,7 +118,32 @@ def build():
         except FileNotFoundError:
             pass
 
+BUILD_LOCK = threading.Lock()
+
 class Handler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        if self.path.split("?")[0] != "/build":
+            self.send_error(404)
+            return
+        secret = os.environ.get("ROM_FETCH_TOKEN", "")
+        import hmac
+        supplied = self.headers.get("Authorization", "")
+        if not secret or not hmac.compare_digest(supplied, "Bearer " + secret):
+            self.send_error(403)
+            return
+        with BUILD_LOCK:
+            if STATE["status"] in ("fetching", "building", "uploading"):
+                self.send_error(409, "ROM build already running")
+                return
+            STATE.update(status="queued", rom_build=False, message="Manual ROM build requested")
+            threading.Thread(target=build, daemon=True).start()
+        body = b'{"status":"queued"}'
+        self.send_response(202)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
     def do_HEAD(self):
         self.respond(False)
     def do_GET(self):
@@ -147,5 +172,6 @@ class Handler(BaseHTTPRequestHandler):
         if send_body:
             self.wfile.write(body)
 
-threading.Thread(target=build, daemon=True).start()
+if os.environ.get("ROM_AUTO_BUILD", "0") == "1":
+    threading.Thread(target=build, daemon=True).start()
 HTTPServer(("0.0.0.0", int(os.environ.get("PORT", "10000"))), Handler).serve_forever()
