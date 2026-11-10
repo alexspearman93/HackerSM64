@@ -82,11 +82,11 @@ const GeoLayout mario_geo_right_hand[] = {
             GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_right_hand_closed),
          GEO_CLOSE_NODE(),
          // Draw pistol under the animated hand, outside the hand-specific scaler.
-         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 50, 115, 35),
+         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 20, 135, 15),
          GEO_OPEN_NODE(),
             GEO_SCALE(LAYER_OPAQUE, 147456), // 2.25x, visible in normal gameplay
             GEO_OPEN_NODE(),
-               GEO_ROTATION_NODE(LAYER_OPAQUE, -65, 0, 0),
+               GEO_ROTATION_NODE(LAYER_OPAQUE, 25, 0, 0),
                GEO_OPEN_NODE(),
                   GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_dl),
                   GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_calibration_dl),
@@ -213,11 +213,11 @@ const GeoLayout mario_geo_medium_poly_right_hand[] = {
             GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_medium_poly_right_hand_closed),
          GEO_CLOSE_NODE(),
          // Draw pistol under the animated hand, outside the hand-specific scaler.
-         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 50, 115, 35),
+         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 20, 135, 15),
          GEO_OPEN_NODE(),
             GEO_SCALE(LAYER_OPAQUE, 147456), // 2.25x, visible in normal gameplay
             GEO_OPEN_NODE(),
-               GEO_ROTATION_NODE(LAYER_OPAQUE, -65, 0, 0),
+               GEO_ROTATION_NODE(LAYER_OPAQUE, 25, 0, 0),
                GEO_OPEN_NODE(),
                   GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_dl),
                   GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_calibration_dl),
@@ -392,11 +392,11 @@ const GeoLayout mario_geo_low_poly_right_hand[] = {
             GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_low_poly_right_hand_closed),
          GEO_CLOSE_NODE(),
          // Draw pistol under the animated hand, outside the hand-specific scaler.
-         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 50, 115, 35),
+         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 20, 135, 15),
          GEO_OPEN_NODE(),
             GEO_SCALE(LAYER_OPAQUE, 147456), // 2.25x, visible in normal gameplay
             GEO_OPEN_NODE(),
-               GEO_ROTATION_NODE(LAYER_OPAQUE, -65, 0, 0),
+               GEO_ROTATION_NODE(LAYER_OPAQUE, 25, 0, 0),
                GEO_OPEN_NODE(),
                   GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_dl),
                   GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_calibration_dl),
