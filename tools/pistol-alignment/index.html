@@ -10,6 +10,9 @@ const idle=[[[0,16383,0],[0,0,16550],[0,0,2180],[-8829,-1482,-708],[32767,32767,
 const worldFields={};for(let k of ['wx','wy','wz']){let box=document.createElement('div'),lab=document.createElement('label'),input=document.createElement('input');lab.textContent=k.toUpperCase();input.type='number';input.step=5;input.dataset.world=k;input.onchange=()=>{scene.updateMatrixWorld(true);let worldPos=new T.Vector3(...['wx','wy','wz'].map(a=>Number(worldFields[a].value)||0));let local=wrist.worldToLocal(worldPos);v.x=Math.round(local.x);v.y=Math.round(local.y);v.z=Math.round(local.z);document.querySelectorAll('#pos input').forEach(el=>el.value=v[el.dataset.key]);update()};box.append(lab,input);document.getElementById('world').append(box);worldFields[k]=input}
 // Full 20-joint animation-driven mannequin. Proxy geometry only, not the commercial Mario meshes.
 // Separate from existing pistol chain until matrix parity and attachment are validated.
+// Animation C5 flags=1: root translation enabled. Y translation multiplier is
+// animYTrans / animYTransDivisor; for Mario's default idle pose it is 189/189.
+const idleRootTranslation=[[0,171,-1],[0,171,-1],[0,169,-1],[0,168,0],[0,166,0],[0,164,0],[0,162,0],[0,160,1],[0,158,1],[0,156,2],[0,155,2],[0,153,3],[0,152,3],[0,151,3],[0,151,3],[0,151,3],[0,152,3],[0,153,3],[0,155,2],[0,156,2],[0,158,1],[0,160,1],[0,162,0],[0,164,0],[0,166,0],[0,168,0],[0,169,-1],[0,170,-1],[0,171,-1],[0,171,-1]];
 const skeletonParents=[-1,0,1,2,2,4,5,6,2,8,9,10,1,12,13,14,1,16,17,18],skeletonOffsets=[[0,0,0],[0,0,0],[68,0,0],[87,0,0],[67,-10,79],[0,0,0],[65,0,0],[60,0,0],[68,-10,-79],[0,0,0],[65,0,0],[60,0,0],[13,-8,42],[0,0,0],[89,0,0],[67,0,0],[13,-8,-42],[0,0,0],[89,0,0],[67,0,0]];
 const skelNodes=skeletonParents.map(()=>new T.Group()),skelRoot=new T.Group();
 skelRoot.scale.setScalar(1);
@@ -37,7 +40,7 @@ for(let i=1;i<20;i++){const j=skeletonParents[i];if(j<0)continue;
 const shoulder=skelNodes[8],upper=skelNodes[9],elbow=skelNodes[10],wrist=skelNodes[11];
 upper.add(limb(d.arm,0xd83731));elbow.add(limb(d.forearm,0xd83731));
 wrist.add(glove);wrist.add(root);
-function update(){skelNodes.forEach((node,i)=>{const a=idle[frame][i],rad=n=>n*Math.PI/32768;node.rotation.set(rad(a[0]),rad(a[1]),rad(a[2]),'ZYX')});
+function update(){skelNodes.forEach((node,i)=>{const a=idle[frame][i],rad=n=>n*Math.PI/32768;if(i===0)node.position.set(...idleRootTranslation[frame]);node.rotation.set(rad(a[0]),rad(a[1]),rad(a[2]),'ZYX')});
 const deg=Math.PI/180;
 shoulder.rotation.x+=pose.sx*deg;shoulder.rotation.y+=pose.sy*deg;shoulder.rotation.z+=pose.sz*deg;
 elbow.rotation.x+=pose.ex*deg;elbow.rotation.y+=pose.ey*deg;elbow.rotation.z+=pose.ez*deg;

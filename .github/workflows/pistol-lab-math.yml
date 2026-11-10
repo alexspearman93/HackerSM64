@@ -1,0 +1,16 @@
+name: Pistol Lab math parity (no ROM)
+on:
+  push:
+    branches: [mario-fireball-gun]
+    paths:
+      - 'tools/pistol-alignment/**'
+      - 'assets/anims/anim_C5.inc.c'
+      - '.github/workflows/pistol-lab-math.yml'
+  workflow_dispatch:
+jobs:
+  math-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate 30 frames x 20 joints without ROM or credentials
+        run: python3 tools/pistol-alignment/test_math_parity.py
