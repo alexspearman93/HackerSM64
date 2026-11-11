@@ -82,14 +82,14 @@ const GeoLayout mario_geo_right_hand[] = {
             GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_right_hand_closed),
          GEO_CLOSE_NODE(),
          // Draw pistol under the animated hand, outside the hand-specific scaler.
-         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 20, 135, 15),
+         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 15, -5, -14),
          GEO_OPEN_NODE(),
             GEO_SCALE(LAYER_OPAQUE, 147456), // 2.25x, visible in normal gameplay
             GEO_OPEN_NODE(),
-               GEO_ROTATION_NODE(LAYER_OPAQUE, 25, 0, 0),
+               GEO_ROTATION_NODE(LAYER_OPAQUE, 11, 112, -116),
                GEO_OPEN_NODE(),
                   GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_dl),
-                  GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_calibration_dl),
+                  GEO_DISPLAY_LIST(LAYER_OPAQUE, NULL), // Calibration markers hidden
                GEO_CLOSE_NODE(),
             GEO_CLOSE_NODE(),
          GEO_CLOSE_NODE(),
@@ -213,14 +213,14 @@ const GeoLayout mario_geo_medium_poly_right_hand[] = {
             GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_medium_poly_right_hand_closed),
          GEO_CLOSE_NODE(),
          // Draw pistol under the animated hand, outside the hand-specific scaler.
-         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 20, 135, 15),
+         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 15, -5, -14),
          GEO_OPEN_NODE(),
             GEO_SCALE(LAYER_OPAQUE, 147456), // 2.25x, visible in normal gameplay
             GEO_OPEN_NODE(),
-               GEO_ROTATION_NODE(LAYER_OPAQUE, 25, 0, 0),
+               GEO_ROTATION_NODE(LAYER_OPAQUE, 11, 112, -116),
                GEO_OPEN_NODE(),
                   GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_dl),
-                  GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_calibration_dl),
+                  GEO_DISPLAY_LIST(LAYER_OPAQUE, NULL), // Calibration markers hidden
                GEO_CLOSE_NODE(),
             GEO_CLOSE_NODE(),
          GEO_CLOSE_NODE(),
@@ -392,14 +392,14 @@ const GeoLayout mario_geo_low_poly_right_hand[] = {
             GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_low_poly_right_hand_closed),
          GEO_CLOSE_NODE(),
          // Draw pistol under the animated hand, outside the hand-specific scaler.
-         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 20, 135, 15),
+         GEO_TRANSLATE_NODE(LAYER_OPAQUE, 15, -5, -14),
          GEO_OPEN_NODE(),
             GEO_SCALE(LAYER_OPAQUE, 147456), // 2.25x, visible in normal gameplay
             GEO_OPEN_NODE(),
-               GEO_ROTATION_NODE(LAYER_OPAQUE, 25, 0, 0),
+               GEO_ROTATION_NODE(LAYER_OPAQUE, 11, 112, -116),
                GEO_OPEN_NODE(),
                   GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_dl),
-                  GEO_DISPLAY_LIST(LAYER_OPAQUE, mario_pistol_calibration_dl),
+                  GEO_DISPLAY_LIST(LAYER_OPAQUE, NULL), // Calibration markers hidden
                GEO_CLOSE_NODE(),
             GEO_CLOSE_NODE(),
          GEO_CLOSE_NODE(),
