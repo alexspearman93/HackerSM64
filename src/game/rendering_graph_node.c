@@ -1,6 +1,8 @@
 #include <PR/ultratypes.h>
 
 #include "area.h"
+#include "mario.h"
+extern u8 gMarioPistolAimTimer;
 #include "engine/math_util.h"
 #include "game_init.h"
 #include "gfx_dimensions.h"
@@ -815,6 +817,28 @@ void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
         rotation[0] = gCurrAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
         rotation[1] = gCurrAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
         rotation[2] = gCurrAnimData[retrieve_animation_index(gCurrAnimFrame, &gCurrAnimAttribute)];
+    }
+
+    /* Consume the original channels first, preserving all other body animation.
+       Pose is instantaneous on a successful shot, held five frames, then eased out. */
+    if (gMarioPistolAimTimer && gMarioState->marioObj != NULL
+        && gCurGraphNodeObject == &gMarioState->marioObj->header.gfx
+        && (gMarioState->action == ACT_IDLE || gMarioState->action == ACT_WALKING)) {
+        const struct Animation *anim = gCurGraphNodeObject->animInfo.curAnim;
+        const u16 *indices = segmented_to_virtual((void *) anim->index);
+        s32 joint = (gCurrAnimAttribute - indices - 6) / 6 - 1;
+        static const s16 pose[4][3] = {
+            {32767, 32767, 16753}, {-32768, 45, 30097},
+            {0, 0, 0}, {21496, 54, -4455}
+        };
+        if (joint >= 8 && joint <= 11) {
+            s32 axis;
+            s32 weight = gMarioPistolAimTimer >= 4 ? 4 : gMarioPistolAimTimer;
+            for (axis = 0; axis < 3; axis++) {
+                s16 delta = (s16)(pose[joint - 8][axis] - rotation[axis]);
+                rotation[axis] += delta * weight / 4;
+            }
+        }
     }
 
     mtxf_rotate_xyz_and_translate_and_mul(rotation, translation, gMatStack[gMatStackIndex + 1], gMatStack[gMatStackIndex]);
