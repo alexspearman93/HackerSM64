@@ -1748,12 +1748,15 @@ static struct Object *mario_pistol_find_target(struct MarioState *m) {
     return best;
 }
 
+u8 gMarioPistolAimTimer;
+
 static void mario_fireball_gun_update(struct MarioState *m) {
     struct Object *bullet;
     struct Object *target;
     s16 yaw = m->faceAngle[1];
     u32 group = m->action & ACT_GROUP_MASK;
 
+    if (gMarioPistolAimTimer > 0) gMarioPistolAimTimer--;
     if (sMarioFireballCooldown > 0) {
         sMarioFireballCooldown--;
     }
@@ -1780,6 +1783,7 @@ static void mario_fireball_gun_update(struct MarioState *m) {
     bullet->oFaceAngleYaw = yaw;
     bullet->oForwardVel = 85.0f;
     bullet->oVelY = 0.0f;
+    gMarioPistolAimTimer = 8;
     sMarioFireballCooldown = 7;
 }
 
