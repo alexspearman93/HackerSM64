@@ -6,7 +6,7 @@ p=Path(__file__).resolve().parents[2]
 f=json.loads((p/'tools/pistol-alignment/idle_c5_frames.json').read_text())['frames'][0]
 parents=[-1,0,1,2,2,4,5,6,2,8,9,10];m=[]
 for i,a in enumerate(f[:12]):
- r=R.from_euler('xyz',np.array(a)*360/65536).as_matrix();m.append(r if parents[i]<0 else m[parents[i]]@r)
+ r=R.from_euler('xyz',np.array(a)*360/65536,degrees=True).as_matrix();m.append(r if parents[i]<0 else m[parents[i]]@r)
 gun=R.from_euler('YXZ',[112,11,-116],degrees=True).as_matrix()
 forward=m[11]@gun[:,2];up=m[11]@gun[:,1]
 t=np.column_stack((forward,up,np.cross(forward,up)))
