@@ -1750,8 +1750,46 @@ static struct Object *mario_pistol_find_target(struct MarioState *m) {
 
 u8 gMarioPistolAimTimer;
 
+/* Reconstruct the firing hand from the current animation and aiming override. */
+static void mario_pistol_muzzle(struct MarioState *m, Vec3f out) {
+    static const s16 joints[7] = {0,1,2,8,9,10,11};
+    static const s16 offsets[7][3] = {{0,0,0},{0,0,0},{68,0,0},{68,-10,-79},{0,0,0},{65,0,0},{60,0,0}};
+    static const s16 pose[4][3] = {{32767,32767,16753},{-32768,45,30097},{0,0,0},{21496,54,-4455}};
+    struct AnimInfo *info = &m->marioObj->header.gfx.animInfo;
+    struct Animation *anim = info->curAnim;
+    u16 *ix = segmented_to_virtual((void *)anim->index);
+    s16 *v = segmented_to_virtual((void *)anim->values);
+    Mat4 a,b,g;
+    Vec3s r;
+    Vec3f tr,local,tip = {2.25f,18.0f,139.5f};
+    s32 i,k,ch,frame = info->animFrame;
+    mtxf_identity(a);
+    for (i=0;i<7;i++) {
+        for(k=0;k<3;k++) {
+            ch=3+joints[i]*3+k;
+            r[k]=v[ix[ch*2+1]+MIN(MAX(frame,0),ix[ch*2]-1)];
+            tr[k]=offsets[i][k];
+            if(i==0) tr[k]+=v[ix[k*2+1]+MIN(MAX(frame,0),ix[k*2]-1)];
+            if(i>=3) r[k]=pose[i-3][k];
+        }
+        mtxf_rotate_xyz_and_translate_and_mul(r,tr,b,a);
+        mtxf_copy(a,b);
+    }
+    vec3s_set(r,11*32768/180,112*32768/180,-116*32768/180);
+    vec3f_set(tr,15,-5,-14);
+    mtxf_rotate_zxy_and_translate(g,tr,r);
+    linear_mtxf_mul_vec3f_and_translate(g,local,tip);
+    linear_mtxf_mul_vec3f_and_translate(a,tip,local);
+    for (k=0;k<3;k++) tip[k] *= 0.25f * m->marioObj->header.gfx.scale[k];
+    out[0]=m->pos[0]+coss(m->faceAngle[1])*tip[0]+sins(m->faceAngle[1])*tip[2];
+    out[1]=m->pos[1]+tip[1];
+    out[2]=m->pos[2]-sins(m->faceAngle[1])*tip[0]+coss(m->faceAngle[1])*tip[2];
+}
+
 static void mario_fireball_gun_update(struct MarioState *m) {
     struct Object *bullet;
+    struct Object *flash;
+    Vec3f muzzle;
     struct Object *target;
     s16 yaw = m->faceAngle[1];
     u32 group = m->action & ACT_GROUP_MASK;
@@ -1768,7 +1806,8 @@ static void mario_fireball_gun_update(struct MarioState *m) {
 
     target = mario_pistol_find_target(m);
     if (target != NULL) {
-        yaw = atan2s(target->oPosZ - m->pos[2], target->oPosX - m->pos[0]);
+        s16 delta = (s16)(atan2s(target->oPosZ - m->pos[2], target->oPosX - m->pos[0]) - yaw);
+        yaw += MAX(-0x600, MIN(0x600, delta));
     }
 
     /* A globally loaded particle makes a small, bright temporary bullet. */
@@ -1776,9 +1815,20 @@ static void mario_fireball_gun_update(struct MarioState *m) {
     if (bullet == NULL) {
         return;
     }
-    bullet->oPosX = m->pos[0] + sins(yaw) * 95.0f;
-    bullet->oPosY = m->pos[1] + 65.0f;
-    bullet->oPosZ = m->pos[2] + coss(yaw) * 95.0f;
+    if (m->action == ACT_IDLE || m->action == ACT_WALKING) {
+        mario_pistol_muzzle(m, muzzle);
+    } else {
+        vec3f_set(muzzle, m->pos[0]+sins(yaw)*95.0f, m->pos[1]+65.0f, m->pos[2]+coss(yaw)*95.0f);
+    }
+    bullet->oPosX = muzzle[0];
+    bullet->oPosY = muzzle[1];
+    bullet->oPosZ = muzzle[2];
+    flash = spawn_object(m->marioObj, MODEL_SPARKLES, bhvMarioPistolFlash);
+    if (flash != NULL) {
+        flash->oPosX = muzzle[0]; flash->oPosY = muzzle[1]; flash->oPosZ = muzzle[2];
+        obj_scale(flash, 0.15f);
+    }
+    play_sound(SOUND_GENERAL_RACE_GUN_SHOT, m->marioObj->header.gfx.cameraToObject);
     bullet->oMoveAngleYaw = yaw;
     bullet->oFaceAngleYaw = yaw;
     bullet->oForwardVel = 85.0f;
