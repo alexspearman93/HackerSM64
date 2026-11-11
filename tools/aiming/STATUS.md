@@ -1,12 +1,11 @@
-# Fixed aiming arm experiment — 2026-11-11
+# Fixed aiming arm — 2026-11-11
 
-Base: 27b05fcf8fa9a1633fe55b5467721ebf4d0adc07.
-Local source compile succeeded using GCC 14 MIPS and repository linker. ROM boots in Mupen64Plus/Rice. Matrix parity tests pass. Visual acceptance FAILED: sampled idle pose does not clearly show forward extended arm/pistol; do not promote this branch.
+Local GCC 14 source build succeeded; Mupen64Plus/Rice cold boot succeeded. Corrected pose inspected idle at frame 400 and running at frame 345. Pistol is forward and right arm extended; legs and free arm animate. Matrix parity tests pass (600 joint/frame matrices).
 
-Changed animation channels for joints 8–11 in idle C3/C4/C5, walking 48 and running 72/73. Other channels preserved. Animation reuse means these edits also affect other actions using the same animations; future implementation should scope by action or use separate animation entries.
+Root cause of failed prototypes: pose.py passed degrees to scipy Rotation.from_euler without degrees=True. Earlier hardcoded parent hierarchy also omitted torso ancestry; corrected. Successful screenshots: clean__3 frame 400, clean__-3 frames 330/345/400 in local emulator harness.
 
-Integrated earlier tested pistol transform (15,-5,-14), (11,112,-116), scale 2.25 in all three hand layouts. Fixed missing comma in supplied source patch. Original aligned ROM remains the accepted visual baseline.
+Changed channels for right shoulder/upper arm/forearm/wrist in idle C3/C4/C5, walk 48 and run 72/73. Hand orientation retains the original calibrated idle transform. Body sway remains. Animation reuse also affects other actions using these animations; swimming, cutscenes, transitions, jumping and full-speed variants are not exhaustively tested. iPhone acceptance pending. Bullet muzzle alignment, sound and flash unchanged.
 
-Next: trace actual decoded animation channels in emulator and verify animation index convention against runtime; establish source-built alignment parity before accepting pose. Avoid further blind axis changes. No bullet/sound/flash changes.
+Pistol transform: position (15,-5,-14), rotation (11,112,-116), scale 2.25; three LOD layouts. Source patch's missing comma corrected.
 
-Build: make VERSION=us COMPILER=gcc -j6 (MIPS toolchain on PATH; LD_LIBRARY_PATH must include tools and extracted toolchain libraries).
+Next: iPhone test; scope aiming to intended actions, then align projectile spawn to muzzle. Original aligned ROM retained as rollback. This branch is experimental, not merged.
