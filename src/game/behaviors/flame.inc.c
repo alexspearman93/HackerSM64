@@ -83,6 +83,8 @@ void bhv_mario_fireball_loop(void) {
         return;
     }
 
+    /* Keep the first rendered bullet at the muzzle for one update. */
+    if (o->oTimer == 0) return;
     o->oPosX += sins(o->oMoveAngleYaw) * o->oForwardVel;
     o->oPosZ += coss(o->oMoveAngleYaw) * o->oForwardVel;
 
