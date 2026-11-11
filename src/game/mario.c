@@ -1783,7 +1783,7 @@ static void mario_fireball_gun_update(struct MarioState *m) {
     bullet->oFaceAngleYaw = yaw;
     bullet->oForwardVel = 85.0f;
     bullet->oVelY = 0.0f;
-    gMarioPistolAimTimer = 8;
+    gMarioPistolAimTimer = 21;
     sMarioFireballCooldown = 7;
 }
 
