@@ -820,7 +820,7 @@ void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
     }
 
     /* Consume the original channels first, preserving all other body animation.
-       Pose is instantaneous on a successful shot, held five frames, then eased out. */
+       Pose is instantaneous on a successful shot, held fifteen frames, then eased out over six frames. */
     if (gMarioPistolAimTimer && gMarioState->marioObj != NULL
         && gCurGraphNodeObject == &gMarioState->marioObj->header.gfx
         && (gMarioState->action == ACT_IDLE || gMarioState->action == ACT_WALKING)) {
@@ -833,10 +833,10 @@ void geo_process_animated_part(struct GraphNodeAnimatedPart *node) {
         };
         if (joint >= 8 && joint <= 11) {
             s32 axis;
-            s32 weight = gMarioPistolAimTimer >= 4 ? 4 : gMarioPistolAimTimer;
+            s32 weight = gMarioPistolAimTimer >= 7 ? 6 : gMarioPistolAimTimer;
             for (axis = 0; axis < 3; axis++) {
                 s16 delta = (s16)(pose[joint - 8][axis] - rotation[axis]);
-                rotation[axis] += delta * weight / 4;
+                rotation[axis] += delta * weight / 6;
             }
         }
     }
