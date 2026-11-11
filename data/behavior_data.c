@@ -6085,3 +6085,12 @@ const BehaviorScript bhvIntroScene[] = {
 };
 
 
+
+const BehaviorScript bhvMarioPistolFlash[] = {
+    BEGIN(OBJ_LIST_UNIMPORTANT),
+    BILLBOARD(),
+    OR_INT(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+    SET_INT(oAnimState, 0),
+    DELAY(2),
+    DEACTIVATE(),
+};
