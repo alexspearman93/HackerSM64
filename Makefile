@@ -1,3 +1,4 @@
+$(shell python3 tools/audio/materialize_pistol.py)
 # Makefile to rebuild SM64 split image
 
 include util.mk
