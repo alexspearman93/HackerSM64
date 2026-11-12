@@ -6,3 +6,6 @@ Standing shot/release sequence exercised. Running shot needs dedicated follow-up
 
 ## Combined effects prototype
 Added animation-derived muzzle position for idle/walking, including pistol transform and Mario quarter-scale. Other actions retain prior spawn fallback. Auto-aim yaw correction limited to 0x600 (~8.4 degrees). Bullet stays at spawn for first update. Two-update sparkle muzzle flash and existing SOUND_GENERAL_RACE_GUN_SHOT triggered only after successful bullet allocation. Compiled and cold-boot firing tested; audio not listened to (dummy audio harness). Running torso tilt, animation frame timing and exact muzzle parity need further validation. First visual trial caught missing quarter-scale; corrected before delivery. Flash is a short world-space particle, not continuously attached.
+
+## Custom arcade sound
+Original deterministic 0.18-second mono 22050 Hz sample: filtered noise crack plus descending bass thump. Added bank-5 instrument 16 and repurposed unused general sound slot 0x31; race-start sound remains unchanged. Generation script and lossless base64 materializer included; Makefile restores sample before discovering sound assets. ADPCM encoding and ROM compilation passed. Boot/firing smoke test uses dummy audio: subjective loudness and timbre await iPhone feedback.
