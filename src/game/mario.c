@@ -1762,14 +1762,29 @@ static void mario_pistol_muzzle(struct MarioState *m, Vec3f out) {
     Mat4 a,b,g;
     Vec3s r;
     Vec3f tr,local,tip = {2.25f,18.0f,139.5f};
-    s32 i,k,ch,frame = info->animFrame;
+    s32 i,k,ch,frame = geo_update_animation_frame(info, NULL);
     mtxf_identity(a);
     for (i=0;i<7;i++) {
+        /* The GEO torso rotation sits between pelvis and torso joints. */
+        if (i == 2 && m->action == ACT_WALKING) {
+            vec3s_set(r, m->marioBodyState->torsoAngle[1],
+                      m->marioBodyState->torsoAngle[2], m->marioBodyState->torsoAngle[0]);
+            vec3f_set(tr, 0, 0, 0);
+            mtxf_rotate_zxy_and_translate_and_mul(r, tr, b, a);
+            mtxf_copy(a, b);
+        }
         for(k=0;k<3;k++) {
             ch=3+joints[i]*3+k;
             r[k]=v[ix[ch*2+1]+MIN(MAX(frame,0),ix[ch*2]-1)];
             tr[k]=offsets[i][k];
-            if(i==0) tr[k]+=v[ix[k*2+1]+MIN(MAX(frame,0),ix[k*2]-1)];
+            if (i == 0) {
+                s32 translate = (anim->flags & ANIM_FLAG_HOR_TRANS) ? k == 1
+                              : (anim->flags & ANIM_FLAG_VERT_TRANS) ? k != 1
+                              : !(anim->flags & ANIM_FLAG_NO_TRANS);
+                f32 multiplier = anim->animYTransDivisor == 0 ? 1.0f
+                               : (f32)info->animYTrans / anim->animYTransDivisor;
+                if (translate) tr[k] += multiplier * v[ix[k*2+1]+MIN(MAX(frame,0),ix[k*2]-1)];
+            }
             if(i>=3) r[k]=pose[i-3][k];
         }
         mtxf_rotate_xyz_and_translate_and_mul(r,tr,b,a);
@@ -1781,9 +1796,9 @@ static void mario_pistol_muzzle(struct MarioState *m, Vec3f out) {
     linear_mtxf_mul_vec3f_and_translate(g,local,tip);
     linear_mtxf_mul_vec3f_and_translate(a,tip,local);
     for (k=0;k<3;k++) tip[k] *= 0.25f * m->marioObj->header.gfx.scale[k];
-    out[0]=m->pos[0]+coss(m->faceAngle[1])*tip[0]+sins(m->faceAngle[1])*tip[2];
-    out[1]=m->pos[1]+tip[1];
-    out[2]=m->pos[2]-sins(m->faceAngle[1])*tip[0]+coss(m->faceAngle[1])*tip[2];
+    /* Match the rendered object transform, including running tilt and offsets. */
+    mtxf_rotate_zxy_and_translate(g, m->marioObj->header.gfx.pos, m->marioObj->header.gfx.angle);
+    linear_mtxf_mul_vec3f_and_translate(g, out, tip);
 }
 
 static void mario_fireball_gun_update(struct MarioState *m) {
@@ -1873,7 +1888,6 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
         gMarioState->marioObj->header.gfx.node.flags &= ~GRAPH_RENDER_INVISIBLE;
         mario_reset_bodystate(gMarioState);
         update_mario_inputs(gMarioState);
-        mario_fireball_gun_update(gMarioState);
 
 #ifdef PUPPYCAM
         if (!(gPuppyCam.flags & PUPPYCAM_BEHAVIOUR_FREE)) {
@@ -1913,6 +1927,7 @@ s32 execute_mario_action(UNUSED struct Object *obj) {
 #endif
         update_mario_info_for_cam(gMarioState);
         mario_update_hitbox_and_cap_model(gMarioState);
+        mario_fireball_gun_update(gMarioState);
 
         // Both of the wind handling portions play wind audio only in
         // non-Japanese releases.
