@@ -3,15 +3,33 @@
     "sample_bank": "sfx_5",
     "envelopes": {
         "envelope0": [
-            [2, 32700],
-            [1, 32700],
-            [32700, 29430],
+            [
+                2,
+                32700
+            ],
+            [
+                1,
+                32700
+            ],
+            [
+                32700,
+                29430
+            ],
             "hang"
         ],
         "envelope1": [
-            [2, 32700],
-            [1, 32700],
-            [32700, 29430],
+            [
+                2,
+                32700
+            ],
+            [
+                1,
+                32700
+            ],
+            [
+                32700,
+                29430
+            ],
             "hang"
         ]
     },
@@ -95,6 +113,11 @@
             "release_rate": 208,
             "envelope": "envelope0",
             "sound": "1C"
+        },
+        "custom_pistol": {
+            "release_rate": 208,
+            "envelope": "envelope0",
+            "sound": "zz_custom_pistol"
         }
     },
     "instrument_list": [
@@ -113,6 +136,7 @@
         "inst12",
         "inst13",
         "inst14",
-        "inst15"
+        "inst15",
+        "custom_pistol"
     ]
 }
