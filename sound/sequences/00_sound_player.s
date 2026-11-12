@@ -2798,7 +2798,7 @@ sound_ref .sound_general_platform
 sound_ref .sound_general_bobomb_explosion
 sound_ref .sound_general_bowser_bomb_explosion
 sound_ref .sound_general_coin_spurt
-sound_ref .sound_general_explosion6
+sound_ref .sound_custom_pistol
 sound_ref .chan_13D4
 sound_ref .sound_general_coin
 sound_ref .sound_general_boat_tilt1
@@ -8174,3 +8174,13 @@ envelope_line 1000 32700
 envelope_line 10 16000
 envelope_line 200 32760
 envelope_goto 3
+
+.sound_custom_pistol:
+chan_setbank 5
+chan_setinstr 16
+chan_setlayer 0, .layer_custom_pistol
+chan_end
+
+.layer_custom_pistol:
+layer_note1 39, 0x20, 127
+layer_end
