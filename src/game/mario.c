@@ -1828,7 +1828,7 @@ static void mario_fireball_gun_update(struct MarioState *m) {
         flash->oPosX = muzzle[0]; flash->oPosY = muzzle[1]; flash->oPosZ = muzzle[2];
         obj_scale(flash, 0.15f);
     }
-    play_sound(SOUND_GENERAL_RACE_GUN_SHOT, m->marioObj->header.gfx.cameraToObject);
+    play_sound(SOUND_GENERAL_EXPLOSION6, m->marioObj->header.gfx.cameraToObject);
     bullet->oMoveAngleYaw = yaw;
     bullet->oFaceAngleYaw = yaw;
     bullet->oForwardVel = 85.0f;
