@@ -123,3 +123,10 @@ void bhv_lab_crate_loop(void) {
     }
     load_object_collision_model();
 }
+
+#ifdef ASSET_LAB_EXPANSION
+#include "levels/bob/asset_lab/animation.inc.c"
+void bhv_lab_animated_loop(void) {
+    o->oFaceAngleYaw = lab_animation_yaw[o->oTimer % 60];
+}
+#endif
