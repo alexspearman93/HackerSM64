@@ -1,0 +1,45 @@
+{
+  "route": "ramp",
+  "source_sha256": "8c90140226147c830a22527fb32facc1ad61cef93d02dbd04e449d4cff9a9e80",
+  "source": "platform-ramp.glb",
+  "target_scale": 584.4300191190491,
+  "source_texture_size": [
+    512,
+    512
+  ],
+  "vertices": 168,
+  "triangles": 84,
+  "target_texture_size": [
+    32,
+    32
+  ],
+  "texture_format": "RGBA16",
+  "warnings": [
+    "Base-color texture reduced to 32x32; metallic/roughness omitted."
+  ],
+  "bounds_target": [
+    [
+      -292,
+      292
+    ],
+    [
+      0,
+      333
+    ],
+    [
+      -292,
+      308
+    ]
+  ],
+  "collision_recipe": {
+    "type": "simplified wedge",
+    "front_lip": 88,
+    "back_height": 333,
+    "surface": "NOT_SLIPPERY",
+    "reason": "Detailed plank collision caused sliding/catching; first lip requires jump."
+  },
+  "files": {
+    "model.inc.c": "3f6b0bebae5d73b07eaa9878089bc8663abd204320bbc410dd4f7185cbe71545",
+    "header.h": "08c589875b30767bf58f271312520ccde6bda9040f155481657783703256950b"
+  }
+}
