@@ -1,0 +1,41 @@
+name: Asset Lab exports
+on:
+  workflow_dispatch:
+  push:
+    branches: [asset-lab]
+    paths: ['tools/asset_lab/**', '.github/workflows/asset-lab-export.yml']
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: Fast-64/fast64
+          ref: b13010949567e4a2bf44ba3ccc18b06427243153
+          path: dependencies/fast64
+      - uses: actions/checkout@v4
+        with:
+          repository: HailToDodongo/tiny3d
+          ref: f2eccc3998967f1915be58d52f1c5bb6d5598a8c
+          path: dependencies/tiny3d
+      - name: Install pinned Blender
+        run: |
+          curl -fLO https://download.blender.org/release/Blender4.3/blender-4.3.2-linux-x64.tar.xz
+          curl -fLO https://download.blender.org/release/Blender4.3/blender-4.3.2.sha256
+          grep 'blender-4.3.2-linux-x64.tar.xz' blender-4.3.2.sha256 | sha256sum -c -
+          tar -xf blender-4.3.2-linux-x64.tar.xz
+      - name: Export original marker and MIT crate routes
+        env:
+          FAST64_PATH: ${{ github.workspace }}/dependencies/fast64
+          TINY3D_PATH: ${{ github.workspace }}/dependencies/tiny3d
+        run: |
+          for route in marker blend glb; do
+            ./blender-4.3.2-linux-x64/blender -b --python-exit-code 1 --python tools/asset_lab/export_assets.py -- "$route"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: asset-lab-exports
+          path: build/asset_lab/export
