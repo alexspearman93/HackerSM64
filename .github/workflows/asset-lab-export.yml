@@ -53,7 +53,14 @@ jobs:
           for route in tree ramp animated; do
             ./blender-4.3.2-linux-x64/blender -b --python-exit-code 1 --python tools/asset_lab/export_expansion.py -- "$route"
           done
+      - name: Convert and validate skeletal fixture
+        run: |
+          python3 -m pip install numpy==2.2.6
+          python3 tools/asset_lab/export_skin.py
+          python3 tools/asset_lab/test_skin.py
       - uses: actions/upload-artifact@v4
         with:
           name: asset-lab-exports
-          path: build/asset_lab/export
+          path: |
+            build/asset_lab/export
+            build/asset_lab/skin
