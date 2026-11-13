@@ -1,6 +1,6 @@
 """Generate an original test courtyard and install already exported assets.
 
-Stage 0=empty courtyard, 1=marker, 2=Blender crate, 3=GLB comparison.
+Stage 0=empty courtyard, 1=marker, 2=Blender crate, 3=GLB comparison, 4=display/solid/breakable crates.
 Only the dedicated asset-lab checkout may run this script.
 """
 from pathlib import Path
@@ -8,12 +8,12 @@ import argparse, shutil, json, subprocess
 
 ROOT = Path(__file__).resolve().parents[2]
 parser = argparse.ArgumentParser()
-parser.add_argument('--stage', type=int, choices=range(4), default=3)
+parser.add_argument('--stage', type=int, choices=range(5), default=4)
 args = parser.parse_args()
 assert subprocess.check_output(['git','branch','--show-current'],cwd=ROOT,text=True).strip() == 'asset-lab'
 dest = ROOT / 'levels/bob/asset_lab'
 dest.mkdir(exist_ok=True)
-names = ['lab_marker','lab_blend','lab_glb'][:args.stage]
+names = ['lab_marker','lab_blend','lab_glb'][:min(args.stage,3)]
 for name in names:
     shutil.copytree(ROOT/'build/asset_lab/export'/name, dest/name, dirs_exist_ok=True)
 
@@ -41,7 +41,7 @@ COL_TRI_INIT(SURFACE_DEFAULT,2), COL_TRI(0,1,2), COL_TRI(0,2,3),
 COL_TRI_STOP(), COL_END(),
 };
 ''')
-headers=['extern Gfx lab_floor_dl[];','extern const Collision lab_floor_collision[];','extern const GeoLayout lab_area_geo[];']
+headers=['extern const Collision lab_crate_collision[];', 'extern Gfx lab_floor_dl[];','extern const Collision lab_floor_collision[];','extern const GeoLayout lab_area_geo[];']
 models=[]
 geos=[]
 for name in names:
@@ -49,6 +49,10 @@ for name in names:
     models.append(f'#include "levels/bob/asset_lab/{name}/model.inc.c"')
     geos.append(f'const GeoLayout {name}_geo[] = {{ GEO_NODE_START(), GEO_OPEN_NODE(), GEO_DISPLAY_LIST(LAYER_OPAQUE,{name}_{name}_mesh), GEO_CLOSE_NODE(), GEO_END(), }};')
 (dest/'header.h').write_text('\n'.join(headers)+'\n')
+if args.stage == 4:
+    (dest/'header.h').write_text('\n'.join(headers)+'\n')
+    geos += ['const GeoLayout lab_crate_geo[] = { GEO_NODE_START(), GEO_OPEN_NODE(), GEO_TRANSLATE_NODE_WITH_DL(LAYER_OPAQUE,0,100,0,lab_glb_lab_glb_mesh), GEO_CLOSE_NODE(), GEO_END(), };']
+    with (dest/'header.h').open('a') as f: f.write('extern const GeoLayout lab_crate_geo[];\n')
 (dest/'models.inc.c').write_text('\n'.join(models)+'\n')
 (dest/'geo.inc.c').write_text('\n'.join(geos)+'''
 const GeoLayout lab_area_geo[] = {
@@ -64,6 +68,15 @@ GEO_OPEN_NODE(),
 GEO_CLOSE_NODE(), GEO_END(),
 };
 ''')
+# Shared behavior definition needs this symbol in every selectable stage.
+with (dest/'collision.inc.c').open('a') as f:
+    f.write('const Collision lab_crate_collision[] = { COL_INIT(), COL_VERTEX_INIT(8),\n')
+    for x,y,z in [(-100,0,-100),(-100,0,100),(-100,200,100),(100,0,100),(100,200,100),(100,0,-100),(100,200,-100),(-100,200,-100)]:
+        f.write(f'COL_VERTEX({x},{y},{z}),\n')
+    f.write('COL_TRI_INIT(SURFACE_NO_CAM_COLLISION,12),\n')
+    for a,b,c in [(0,1,2),(1,3,4),(1,4,2),(5,3,1),(5,1,0),(6,4,3),(6,3,5),(7,4,6),(7,2,4),(0,2,7),(7,6,5),(7,5,0)]:
+        f.write(f'COL_TRI({a},{b},{c}),\n')
+    f.write('COL_TRI_STOP(), COL_END(), };\n')
 # Use BoB's segment slots; replace its contents only on this branch.
 (ROOT/'levels/bob/leveldata.c').write_text('''#include <ultra64.h>
 #include "sm64.h"
@@ -105,9 +118,18 @@ INIT_LEVEL(),
 LOAD_YAY0(0x07,_bob_segment_7SegmentRomStart,_bob_segment_7SegmentRomEnd),
 ALLOC_LEVEL_POOL(), MARIO(MODEL_MARIO,0x00000001,bhvMario),
 '''
+if args.stage == 4:
+    script = script.replace('const LevelScript level_bob_entry[] = {', '''extern const BehaviorScript bhvLabCrate[];
+const LevelScript level_bob_entry[] = {''')
+    script += 'LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_06,lab_crate_geo),\n'
 for i,name in enumerate(names): script+=f'LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_0{i+3},{name}_geo),\n'
 script+='AREA(1,lab_area_geo),\n'
-for i,name in enumerate(names):
+if args.stage == 4:
+    script += '''OBJECT(MODEL_LEVEL_GEOMETRY_06,-500,0,0,0,0,0,0,bhvStaticObject),
+OBJECT(MODEL_LEVEL_GEOMETRY_06,0,0,0,0,0,0,0,bhvLabCrate),
+OBJECT(MODEL_LEVEL_GEOMETRY_06,500,0,0,0,0,0,0x00010000,bhvLabCrate),
+'''
+for i,name in enumerate(names if args.stage != 4 else []):
     x=[-600,0,500][i]; y=0 if i==0 else 100
     script+=f'OBJECT(MODEL_LEVEL_GEOMETRY_0{i+3},{x},{y},0,0,0,0,0,bhvStaticObject),\n'
 script+='''OBJECT(MODEL_NONE,0,100,850,0,180,0,0x000A0000,bhvSpinAirborneWarp),
@@ -130,7 +152,7 @@ p=ROOT/'src/game/hud.c'
 s=p.read_text()
 import re
 s=re.sub(r'\n        /\* ASSET LAB HUD \*/.*?/\* END ASSET LAB HUD \*/','',s,flags=re.S)
-s=s.replace('        create_dl_ortho_matrix();','        create_dl_ortho_matrix();\n        /* ASSET LAB HUD */\n        print_text(40, 200, "ASSET LAB '+str(args.stage)+'");\n        print_text(20, 20, "1 MARKER  2 BLEND  3 GLB");\n        /* END ASSET LAB HUD */')
+s=s.replace('        create_dl_ortho_matrix();','        create_dl_ortho_matrix();\n        /* ASSET LAB HUD */\n        print_text(40, 200, "ASSET LAB '+str(args.stage)+'");\n        print_text(20, 20, "1 DISPLAY 2 SOLID 3 BREAK");\n        /* END ASSET LAB HUD */')
 p.write_text(s)
 (ROOT/'build/asset_lab/stage.json').write_text(json.dumps({'stage':args.stage,'assets':names},indent=2)+'\n')
 print('Installed Asset Lab stage',args.stage,names)
