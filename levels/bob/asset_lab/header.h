@@ -1,3 +1,4 @@
+extern const Collision lab_crate_collision[];
 extern Gfx lab_floor_dl[];
 extern const Collision lab_floor_collision[];
 extern const GeoLayout lab_area_geo[];
@@ -31,3 +32,4 @@ extern Gfx mat_revert_lab_glb_lab_glb_material[];
 extern Gfx lab_glb_lab_glb_mesh[];
 
 extern const GeoLayout lab_glb_geo[];
+extern const GeoLayout lab_crate_geo[];
