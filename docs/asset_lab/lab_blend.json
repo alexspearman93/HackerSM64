@@ -1,0 +1,63 @@
+{
+  "route": "blend",
+  "blender": "4.3.2",
+  "compiled": false,
+  "emulator_tested": false,
+  "source_sha256": "b7365ad0e60f2c941e5134b89c0f655aa88ef1743be9a8b0beec945c85138a08",
+  "material_rebuilt": true,
+  "source_material_reuse": "failed emulator visual check: black crate",
+  "vertices": 8,
+  "triangles": 12,
+  "bounds_local": [
+    [
+      -1.0,
+      -1.0,
+      -1.0
+    ],
+    [
+      -1.0,
+      -1.0,
+      1.0
+    ],
+    [
+      -1.0,
+      1.0,
+      1.0
+    ],
+    [
+      -1.0,
+      1.0,
+      -1.0
+    ],
+    [
+      1.0,
+      -1.0,
+      -1.0
+    ],
+    [
+      1.0,
+      -1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      -1.0
+    ]
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "exported": true,
+  "files": {
+    "model.inc.c": "70cc7461d49310bd208111e8adbc21d1d4186ce17075fdde4c82131b906e8dfd",
+    "header.h": "66c23a135cecb8ed2ba54c809fc33193bcc5d3f8ed8f347fd8713579694343de"
+  }
+}
