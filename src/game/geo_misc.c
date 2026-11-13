@@ -194,3 +194,7 @@ Gfx *geo_exec_cake_end_screen(s32 callContext, struct GraphNode *node, UNUSED Ma
 
     return displayList;
 }
+
+#ifdef ASSET_LAB_SKIN
+#include "asset_lab/skin_geo.inc.c"
+#endif
