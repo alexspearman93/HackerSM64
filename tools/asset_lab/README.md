@@ -174,3 +174,35 @@ Use replay `ramp` for climbing and `overview` for stationary animation captures.
 No audio listening, hardware performance certification or new iPhone acceptance.
 CI exports all six source routes without ROM input; full ROM/emulator runs remain
 private local evidence. Do not promote to the pistol branch automatically.
+
+## LAB-109 — two-joint skeletal skinning
+
+User accepted LAB-108 before this experiment. Reuses Marco Hutter's CC0 Khronos
+SimpleSkin at commit `4995a638c96dbc94376d3d6164e70fee3ac7f7a2`.
+Ten vertices, eight triangles, two joints, 5.5-second loop sampled at 30 Hz.
+Left strip is bind pose; right strip blends joint transforms at runtime. Color
+indicates child-joint weight. It is decorative and has no collision.
+
+`python3 tools/asset_lab/export_skin.py` fetches hash-checked source data and
+converts hierarchy, inverse bind matrices, weights and rotation keys into C.
+`python3 tools/asset_lab/test_skin.py` compiles the actual C evaluator and checks
+all 165 frames against an independent analytic hinge reference. Run
+`python3 tools/asset_lab/install_skin.py` to regenerate the complete courtyard.
+The export workflow repeats source conversion and C parity checks without ROMs.
+
+CPU linear blend skinning uses 15,840 bytes of sampled joint matrices, not baked
+vertex frames. Frame-owned N64 vertices avoid overwriting an in-flight RSP buffer.
+This is a fixture-specific adapter, not SM64 native joint animation, a universal
+glTF importer, retargeting, or proof of full-character performance. Unlit vertex
+colors replace source material; integer N64 positions truncate by less than one unit.
+
+US/f3dzex ROM compiled and booted in Mupen64Plus/Rice. Four static-camera captures
+show the right strip bending while the left remains straight. Read-only render-pose
+telemetry covered all 165 frames (598 samples), max error 0.000043745 game units;
+base anchored. Host C check max error 0.000043497. No emulator memory writes.
+To repeat telemetry, pass LAB_SKIN_FRAME and LAB_SKIN_PROBE addresses from the
+ELF's gLabSkinFrame/gLabSkinProbe symbols and LAB_SKIN_TRACE output path to the
+replay runner; validate with `validate_skin_trace.py TRACE --output REPORT`.
+Initial compile failed because gGlobalTimer was undeclared; including game_init.h
+fixed it. iPhone acceptance, audio listening, larger rigs and timing budgets remain
+unverified. Next: an explicitly licensed character rig and measured CPU/RSP costs.
