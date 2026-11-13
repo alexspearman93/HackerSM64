@@ -21,6 +21,15 @@ jobs:
           repository: HailToDodongo/tiny3d
           ref: f2eccc3998967f1915be58d52f1c5bb6d5598a8c
           path: dependencies/tiny3d
+      - uses: actions/checkout@v4
+        with:
+          repository: Hidencod/tge-assets
+          ref: 3ddcc695adbba9fb918cf31b7c139b3f95b76910
+          path: dependencies/kenney
+      - name: Fetch pinned CC0 animation
+        env:
+          ANIMATED_PATH: ${{ github.workspace }}/dependencies/animated
+        run: python3 tools/asset_lab/fetch_animation.py
       - name: Install pinned Blender
         run: |
           curl -fLO https://download.blender.org/release/Blender4.3/blender-4.3.2-linux-x64.tar.xz
@@ -34,6 +43,15 @@ jobs:
         run: |
           for route in marker blend glb; do
             ./blender-4.3.2-linux-x64/blender -b --python-exit-code 1 --python tools/asset_lab/export_assets.py -- "$route"
+          done
+      - name: Export second creator and animation samples
+        env:
+          FAST64_PATH: ${{ github.workspace }}/dependencies/fast64
+          KENNEY_PATH: ${{ github.workspace }}/dependencies/kenney
+          ANIMATED_PATH: ${{ github.workspace }}/dependencies/animated
+        run: |
+          for route in tree ramp animated; do
+            ./blender-4.3.2-linux-x64/blender -b --python-exit-code 1 --python tools/asset_lab/export_expansion.py -- "$route"
           done
       - uses: actions/upload-artifact@v4
         with:
