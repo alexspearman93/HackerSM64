@@ -1,0 +1,9 @@
+extern Lights1 lab_glb_lab_glb_material_lights;
+extern u8 lab_glb_crate00_ci8_ci8[];
+extern u8 lab_glb_crate00_ci8_pal_rgba16[];
+extern Vtx lab_glb_lab_glb_mesh_vtx_cull[8];
+extern Vtx lab_glb_lab_glb_mesh_vtx_0[24];
+extern Gfx lab_glb_lab_glb_mesh_tri_0[];
+extern Gfx mat_lab_glb_lab_glb_material[];
+extern Gfx mat_revert_lab_glb_lab_glb_material[];
+extern Gfx lab_glb_lab_glb_mesh[];
