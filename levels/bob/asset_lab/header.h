@@ -64,3 +64,5 @@ extern Gfx lab_animated_lab_animated_mesh[];
 
 extern const GeoLayout lab_animated_geo[];
 extern const Collision lab_ramp_collision[];
+
+extern const GeoLayout lab_skin_bind_geo[],lab_skin_animated_geo[];
