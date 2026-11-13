@@ -67,6 +67,8 @@ const LevelScript level_main_menu_entry_act_select_exit[] = {
 
 const LevelScript level_main_menu_entry_act_select[] = {
     CALL(/*arg*/ 0, /*func*/ lvl_set_current_level),
+    /* Asset Lab: boot directly into act 1 for reproducible captures. */
+    SET_REG(1), GET_OR_SET(OP_SET, VAR_CURR_ACT_NUM), EXIT(),
     JUMP_IF(/*op*/ OP_EQ, /*arg*/ FALSE, (level_main_menu_entry_act_select_exit)),
     INIT_LEVEL(),
     LOAD_GODDARD(),
