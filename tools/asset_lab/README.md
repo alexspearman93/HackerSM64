@@ -73,3 +73,49 @@ all faces on iPhone. The props are intentionally non-solid in this experiment.
 
 Advance by evidence: discovered -> exported -> compiled -> visually inspected ->
 interactive/emulator accepted. No automatic promotion to the pistol workshop.
+
+## LAB-105: collision and interaction (2026-11-13)
+
+User confirmed LAB-103 display on iPhone. Stage 4 now supplies three identical
+crate models: left display-only, middle solid, right solid and breakable. Run
+`python3 tools/asset_lab/install_scene.py --stage 4`, then build as above.
+
+A separate 200x200x200 collision cube has its base at Y=0. The mesh is translated
+up 100 in its geolayout to match. Surface collision uses no-camera-collision
+triangles, so physical body collision does not introduce camera obstacles.
+The branch-local `bhvLabCrate` adapter registers dynamic collision and optionally
+uses SM64's breakable interaction and coin-spawn routines (parameter byte 2 = 1).
+On destruction it returns before collision registration. The source model is
+never replaced by the stock box model. Each broken crate releases one coin;
+restart the ROM to reset. No automatic respawn is implemented.
+
+Measured Mupen64Plus/Rice controller-replay checks passed:
+- Holding forward stops Mario at Z=150 (crate face Z=100 plus Mario radius).
+- Jumping lands at Y=200, floor height 200, and remains standing there.
+- Punch removes the right crate; Mario walks through its former footprint and
+  collects its coin (counter 0 -> 1, never more than 1 in the replay).
+- Ground pound from its top removes the platform; Mario lands at Y=0/floor=0.
+  Coin collection was verified in the punch replay, not the ground-pound replay.
+
+Initial punch attempt failed with an interaction radius of 100: collision kept
+Mario outside attack overlap. Using the stock breakable-box radius of 150 fixed
+this while keeping physical collision aligned to the visible cube.
+
+`scripted_input.c` supplies controller input only. Its optional DebugMemRead32
+telemetry reads Mario coordinates/action/coin count without writing emulated
+memory. Replays count controller polls, not video frames. `run_replay.sh` locates
+Mario's pointer from the actual ELF; never reuse an address from another build.
+Provide Mupen64Plus 2.6 headers/runtime, a MIPS nm and an existing X display:
+
+```
+TOOLROOT=/path/to/toolroot DISPLAY=localhost:99 bash tools/asset_lab/run_replay.sh solid /tmp/solid
+TOOLROOT=/path/to/toolroot DISPLAY=localhost:99 bash tools/asset_lab/run_replay.sh punch /tmp/punch
+TOOLROOT=/path/to/toolroot DISPLAY=localhost:99 bash tools/asset_lab/run_replay.sh ground_pound /tmp/pound
+```
+
+Collect the three *-trace.csv files into one evidence directory and run
+`python3 tools/asset_lab/validate_replays.py /path/to/evidence`.
+Screenshots/logs/trace CSVs accompany the private test build. Audio uses dummy
+output and was not listened to. New stage-4 iPhone acceptance and exhaustive
+edge/camera tests remain pending. The prior export CI covers conversions,
+not this private-ROM interactive harness.
