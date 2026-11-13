@@ -14,3 +14,6 @@ GEO_OPEN_NODE(),
  GEO_CLOSE_NODE(), GEO_CLOSE_NODE(), GEO_CLOSE_NODE(),
 GEO_CLOSE_NODE(), GEO_END(),
 };
+const GeoLayout lab_tree_geo[] = { GEO_NODE_START(), GEO_OPEN_NODE(), GEO_DISPLAY_LIST(LAYER_OPAQUE,lab_tree_lab_tree_mesh), GEO_CLOSE_NODE(), GEO_END(), };
+const GeoLayout lab_ramp_geo[] = { GEO_NODE_START(), GEO_OPEN_NODE(), GEO_DISPLAY_LIST(LAYER_OPAQUE,lab_ramp_lab_ramp_mesh), GEO_CLOSE_NODE(), GEO_END(), };
+const GeoLayout lab_animated_geo[] = { GEO_NODE_START(), GEO_OPEN_NODE(), GEO_DISPLAY_LIST(LAYER_OPAQUE,lab_animated_lab_animated_mesh), GEO_CLOSE_NODE(), GEO_END(), };
