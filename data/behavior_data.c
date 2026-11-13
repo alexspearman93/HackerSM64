@@ -6075,3 +6075,13 @@ const BehaviorScript bhvIntroScene[] = {
 };
 
 
+
+#include "levels/bob/asset_lab/header.h"
+void bhv_lab_crate_loop(void);
+const BehaviorScript bhvLabCrate[] = {
+    BEGIN(OBJ_LIST_SURFACE),
+    OR_LONG(oFlags, OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_DONT_CALC_COLL_DIST),
+    LOAD_COLLISION_DATA(lab_crate_collision),
+    SET_FLOAT(oCollisionDistance,4000),
+    BEGIN_LOOP(), CALL_NATIVE(bhv_lab_crate_loop), END_LOOP(),
+};
