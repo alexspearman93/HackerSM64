@@ -732,6 +732,10 @@ void render_hud(void) {
                   G_MTX_PROJECTION | G_MTX_MUL | G_MTX_NOPUSH);
 #else
         create_dl_ortho_matrix();
+        /* ASSET LAB HUD */
+        print_text(40, 200, "ASSET LAB 3");
+        print_text(20, 20, "1 MARKER  2 BLEND  3 GLB");
+        /* END ASSET LAB HUD */
 #endif
 
         if (gCurrentArea != NULL && gCurrentArea->camera->mode == CAMERA_MODE_INSIDE_CANNON) {
