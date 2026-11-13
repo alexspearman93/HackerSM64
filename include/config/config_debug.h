@@ -94,4 +94,8 @@
 
 
 
+
+
 #define ASSET_LAB_EXPANSION
+
+#define ASSET_LAB_SKIN
