@@ -6085,3 +6085,16 @@ const BehaviorScript bhvLabCrate[] = {
     SET_FLOAT(oCollisionDistance,4000),
     BEGIN_LOOP(), CALL_NATIVE(bhv_lab_crate_loop), END_LOOP(),
 };
+
+#ifdef ASSET_LAB_EXPANSION
+void bhv_lab_animated_loop(void);
+const BehaviorScript bhvLabRamp[] = {
+BEGIN(OBJ_LIST_SURFACE), OR_LONG(oFlags,OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE | OBJ_FLAG_DONT_CALC_COLL_DIST),
+LOAD_COLLISION_DATA(lab_ramp_collision), SET_FLOAT(oCollisionDistance,4000),
+BEGIN_LOOP(), CALL_NATIVE(load_object_collision_model), END_LOOP(),
+};
+const BehaviorScript bhvLabAnimated[] = {
+BEGIN(OBJ_LIST_DEFAULT), OR_INT(oFlags,OBJ_FLAG_UPDATE_GFX_POS_AND_ANGLE),
+BEGIN_LOOP(), CALL_NATIVE(bhv_lab_animated_loop), END_LOOP(),
+};
+#endif
