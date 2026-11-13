@@ -1,0 +1,27 @@
+{
+  "source_commit": "4995a638c96dbc94376d3d6164e70fee3ac7f7a2",
+  "source_hashes": {
+    "SimpleSkin.gltf": "8d92e9888340eb98e82a65a1f8b037d9a1d9f09e5fd0b6ba6d40fd93700b3239",
+    "SimpleSkin_animation.bin": "ff21b1bc3d0abbe53f7665060ec6c22d873b6e85a7669171a2b6b8ae01c39347",
+    "SimpleSkin_geometry.bin": "35f0ca6bc07976c0aadc163d4737758989cfcc9870a99800004c4478fe698b63",
+    "SimpleSkin_inverseBindMatrices.bin": "5844ab221cd2ad367420a248f6387b46e5f8498604427730a37ee96b4d4ec599",
+    "SimpleSkin_skinningData.bin": "413bc8a8c0da673df767874e6f05f0b00c9261756a08586b9d555bd5535414b5"
+  },
+  "vertices": 10,
+  "triangles": 8,
+  "joints": 2,
+  "influences_max": 2,
+  "fps": 30,
+  "frames": 165,
+  "duration": 5.5,
+  "scale": 180,
+  "backend": "CPU linear blend skinning from joint matrices / inverse binds / source weights",
+  "runtime_vertex_pose_baking": false,
+  "matrix_bytes": 15840,
+  "limitations": [
+    "two-joint fixture adapter",
+    "unlit weight visualization",
+    "no collision or rig retargeting",
+    "not native SM64 joint-animation format"
+  ]
+}
