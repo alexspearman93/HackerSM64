@@ -1,0 +1,6 @@
+SimpleSkin — Marco Hutter (javagl), 2017. CC0-1.0 Universal.
+https://creativecommons.org/publicdomain/zero/1.0/legalcode
+Source notice: https://github.com/KhronosGroup/glTF-Sample-Assets/blob/4995a638c96dbc94376d3d6164e70fee3ac7f7a2/Models/SimpleSkin/README.md
+Original geometry, joint indices, weights, inverse binds and animation retained.
+Vertex colors are an original weight visualization. This is a diagnostic strip,
+not a finished character asset. Source inputs are pinned and hash checked.
