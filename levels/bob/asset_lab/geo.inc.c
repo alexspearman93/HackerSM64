@@ -1,6 +1,7 @@
 const GeoLayout lab_marker_geo[] = { GEO_NODE_START(), GEO_OPEN_NODE(), GEO_DISPLAY_LIST(LAYER_OPAQUE,lab_marker_lab_marker_mesh), GEO_CLOSE_NODE(), GEO_END(), };
 const GeoLayout lab_blend_geo[] = { GEO_NODE_START(), GEO_OPEN_NODE(), GEO_DISPLAY_LIST(LAYER_OPAQUE,lab_blend_lab_blend_mesh), GEO_CLOSE_NODE(), GEO_END(), };
 const GeoLayout lab_glb_geo[] = { GEO_NODE_START(), GEO_OPEN_NODE(), GEO_DISPLAY_LIST(LAYER_OPAQUE,lab_glb_lab_glb_mesh), GEO_CLOSE_NODE(), GEO_END(), };
+const GeoLayout lab_crate_geo[] = { GEO_NODE_START(), GEO_OPEN_NODE(), GEO_TRANSLATE_NODE_WITH_DL(LAYER_OPAQUE,0,100,0,lab_glb_lab_glb_mesh), GEO_CLOSE_NODE(), GEO_END(), };
 const GeoLayout lab_area_geo[] = {
 GEO_NODE_SCREEN_AREA(10,SCREEN_CENTER_X,SCREEN_CENTER_Y,SCREEN_CENTER_X,SCREEN_CENTER_Y),
 GEO_OPEN_NODE(),
