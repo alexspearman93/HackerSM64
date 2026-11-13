@@ -733,7 +733,7 @@ void render_hud(void) {
 #else
         create_dl_ortho_matrix();
         /* ASSET LAB HUD */
-        print_text(40, 200, "ASSET LAB 4");
+        print_text(12, 215, "LAB 108");
         print_text(20, 20, "1 DISPLAY 2 SOLID 3 BREAK");
         /* END ASSET LAB HUD */
 #endif
