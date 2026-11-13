@@ -1,0 +1,62 @@
+{
+  "route": "glb",
+  "blender": "4.3.2",
+  "compiled": false,
+  "emulator_tested": false,
+  "source_sha256": "1188f63a5db0d004acf453d3927959d39b3ab48d9f9676642a0953f8aafe4e12",
+  "material_rebuilt": true,
+  "vertices": 24,
+  "triangles": 12,
+  "bounds_local": [
+    [
+      -1.0,
+      -1.0,
+      -1.0
+    ],
+    [
+      -1.0,
+      -1.0,
+      1.0
+    ],
+    [
+      -1.0,
+      1.0,
+      1.0
+    ],
+    [
+      -1.0,
+      1.0,
+      -1.0
+    ],
+    [
+      1.0,
+      -1.0,
+      -1.0
+    ],
+    [
+      1.0,
+      -1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      1.0
+    ],
+    [
+      1.0,
+      1.0,
+      -1.0
+    ]
+  ],
+  "scale": [
+    1.0,
+    1.0,
+    1.0
+  ],
+  "exported": true,
+  "files": {
+    "model.inc.c": "dceafb511080c00c6de894e801428533d47498fcad8de8cbf6a1b9ba0cdc1d84",
+    "header.h": "1647dcfdcaf31fab023a32299cd4a670868b807ad6db46bf580e407e0eb2a203"
+  }
+}
