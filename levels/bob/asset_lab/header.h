@@ -33,3 +33,34 @@ extern Gfx lab_glb_lab_glb_mesh[];
 
 extern const GeoLayout lab_glb_geo[];
 extern const GeoLayout lab_crate_geo[];
+extern Lights1 lab_tree_lab_tree_material_lights;
+extern u8 lab_tree_colormap_rgba16[];
+extern Vtx lab_tree_lab_tree_mesh_vtx_cull[8];
+extern Vtx lab_tree_lab_tree_mesh_vtx_0[842];
+extern Gfx lab_tree_lab_tree_mesh_tri_0[];
+extern Gfx mat_lab_tree_lab_tree_material[];
+extern Gfx mat_revert_lab_tree_lab_tree_material[];
+extern Gfx lab_tree_lab_tree_mesh[];
+
+extern const GeoLayout lab_tree_geo[];
+extern Lights1 lab_ramp_lab_ramp_material_lights;
+extern u8 lab_ramp_colormap_rgba16[];
+extern Vtx lab_ramp_lab_ramp_mesh_vtx_cull[8];
+extern Vtx lab_ramp_lab_ramp_mesh_vtx_0[168];
+extern Gfx lab_ramp_lab_ramp_mesh_tri_0[];
+extern Gfx mat_lab_ramp_lab_ramp_material[];
+extern Gfx mat_revert_lab_ramp_lab_ramp_material[];
+extern Gfx lab_ramp_lab_ramp_mesh[];
+
+extern const GeoLayout lab_ramp_geo[];
+extern Lights1 lab_animated_lab_animated_material_lights;
+extern u8 lab_animated_AnimatedCube_BaseColor_rgba16[];
+extern Vtx lab_animated_lab_animated_mesh_vtx_cull[8];
+extern Vtx lab_animated_lab_animated_mesh_vtx_0[24];
+extern Gfx lab_animated_lab_animated_mesh_tri_0[];
+extern Gfx mat_lab_animated_lab_animated_material[];
+extern Gfx mat_revert_lab_animated_lab_animated_material[];
+extern Gfx lab_animated_lab_animated_mesh[];
+
+extern const GeoLayout lab_animated_geo[];
+extern const Collision lab_ramp_collision[];
