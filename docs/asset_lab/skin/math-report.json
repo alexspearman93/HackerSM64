@@ -1,0 +1,9 @@
+{
+  "frames_checked": 165,
+  "vertices_per_frame": 10,
+  "max_c_float_error": 4.349689169202975e-05,
+  "anchor_fixed": true,
+  "tip_moves": true,
+  "independent_reference": "source scalar Z-hinge interpolation",
+  "runtime": "C linear blend skinning"
+}
