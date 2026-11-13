@@ -119,3 +119,58 @@ Screenshots/logs/trace CSVs accompany the private test build. Audio uses dummy
 output and was not listened to. New stage-4 iPhone acceptance and exhaustive
 edge/camera tests remain pending. The prior export CI covers conversions,
 not this private-ROM interactive harness.
+
+## LAB-106–108: second creator, environment, rigid animation
+
+This series extends the approved crate experiments. LAB-106 imports Kenney's
+CC0 tree (408 triangles); LAB-107 imports the same pack's wooden ramp (84
+triangles); LAB-108 imports UX3D/Norbert Nopper's CC0 AnimatedCube (12 triangles).
+This numbering supersedes the earlier provisional ladder; skeletal animation
+and stress limits remain separate future tests.
+
+Kenney's author page https://kenney.nl/assets/platformer-kit lists CC0. Direct
+archive download returned HTTP 403 here. Inputs came from Hidencod/tge-assets
+commit 3ddcc695adbba9fb918cf31b7c139b3f95b76910, whose license attributes Kenney
+and identifies the self-contained GLBs as CC0 derivatives. Source paths are
+packs/platformer-kit/tree.glb and platform-ramp.glb; exporter verifies SHA256.
+Animation inputs come from KhronosGroup/glTF-Sample-Assets commit
+4995a638c96dbc94376d3d6164e70fee3ac7f7a2, Models/AnimatedCube/glTF/. The model
+README credits UX3D, 2017 / Norbert Nopper under CC0. Notices retained alongside
+converted sources. See export reports for hashes and target scale.
+
+```
+# KENNEY_PATH points to the pinned mirror checkout; FAST64_PATH as above.
+python3 tools/asset_lab/fetch_animation.py
+for route in tree ramp animated; do
+  blender -b --python-exit-code 1 --python tools/asset_lab/export_expansion.py -- "$route"
+done
+python3 tools/asset_lab/install_expansion.py
+make VERSION=us -j8
+```
+
+All three routes retain UVs and adapt base-color materials to SM64. Source
+512x512 textures become 32x32 RGBA16 (2048-byte texels); metallic/roughness are
+omitted. This is intentionally lossy and needs visual review, not a universal
+PBR material converter. Tree height is 600 game units; its collision is absent.
+Ramp width/depth is roughly 600 units. Initial render-mesh collision was tested:
+Mario caught/slid between planks. Final collision is an explicit simplified
+non-slippery wedge, eight vertices/twelve triangles. The 88-unit front lip
+requires a jump; standable surface rises to 333 units at the back. Detail
+collision is also retained in export artifacts to reproduce the failed test.
+Controller replay reached and held Y/floorHeight=281.958 on the slope.
+
+Animation is source-driven rigid object yaw, not skinning. The exporter reads
+the glTF rotation sampler, applies quaternion SLERP and emits sixty samples
+for a two-second loop at 30 game updates/second. Unsupported multi-channel or
+non-Y rotation tracks fail. Early sampling through Blender exposed frame-rate
+and interpolation differences; direct source sampling removed those ambiguities.
+Static camera captures show different cube orientations; no moving collision
+is attached. Skeletal rigs, blended weights and animation retargeting untested.
+
+The expanded scene preserves all three crate stations. Assets sit behind them:
+tree left, rotating cube middle, ramp right. Updated replay runner includes the
+Mupen config version so requested screenshot paths survive config initialization.
+Use replay `ramp` for climbing and `overview` for stationary animation captures.
+No audio listening, hardware performance certification or new iPhone acceptance.
+CI exports all six source routes without ROM input; full ROM/emulator runs remain
+private local evidence. Do not promote to the pistol branch automatically.
