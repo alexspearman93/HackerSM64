@@ -9,7 +9,7 @@
 #include "levels/scripts.h"
 #include "make_const_nonconst.h"
 #include "levels/bob/asset_lab/header.h"
-extern const BehaviorScript bhvLabCrate[];
+extern const BehaviorScript bhvLabCrate[], bhvLabRamp[], bhvLabAnimated[];
 const LevelScript level_bob_entry[] = {
 INIT_LEVEL(),
 LOAD_YAY0(0x07,_bob_segment_7SegmentRomStart,_bob_segment_7SegmentRomEnd),
@@ -18,7 +18,13 @@ LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_06,lab_crate_geo),
 LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_03,lab_marker_geo),
 LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_04,lab_blend_geo),
 LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_05,lab_glb_geo),
+LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_07,lab_tree_geo),
+LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_08,lab_ramp_geo),
+LOAD_MODEL_FROM_GEO(MODEL_LEVEL_GEOMETRY_09,lab_animated_geo),
 AREA(1,lab_area_geo),
+OBJECT(MODEL_LEVEL_GEOMETRY_07,-750,0,-650,0,0,0,0,bhvStaticObject),
+OBJECT(MODEL_LEVEL_GEOMETRY_08,650,0,-650,0,0,0,0,bhvLabRamp),
+OBJECT(MODEL_LEVEL_GEOMETRY_09,-100,300,-650,0,0,0,0,bhvLabAnimated),
 OBJECT(MODEL_LEVEL_GEOMETRY_06,-500,0,0,0,0,0,0,bhvStaticObject),
 OBJECT(MODEL_LEVEL_GEOMETRY_06,0,0,0,0,0,0,0,bhvLabCrate),
 OBJECT(MODEL_LEVEL_GEOMETRY_06,500,0,0,0,0,0,0x00010000,bhvLabCrate),
