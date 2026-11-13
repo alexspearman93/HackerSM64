@@ -144,7 +144,7 @@ CLEAR_LEVEL(), SLEEP_BEFORE_EXIT(1), EXIT(),
 '''
 (ROOT/'levels/bob/script.c').write_text(script)
 p=ROOT/'include/config/config_debug.h'
-p.write_text(p.read_text().replace('// #define TEST_LEVEL LEVEL_BOB','#define TEST_LEVEL LEVEL_BOB'))
+p.write_text(p.read_text().replace('// #define TEST_LEVEL LEVEL_BOB','#define TEST_LEVEL LEVEL_BOB').replace('#define ASSET_LAB_EXPANSION',''))
 p=ROOT/'include/config/config_rom.h'
 s=p.read_text()
 # HUD identity is independent of cartridge title implementation.
