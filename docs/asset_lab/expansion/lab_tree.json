@@ -1,0 +1,24 @@
+{
+  "route": "tree",
+  "source_sha256": "f04a16034071715cb8ac7889b3bb72add0afaa24eeb2f25869e2077935d9959a",
+  "source": "tree.glb",
+  "target_scale": 310.739133623701,
+  "source_texture_size": [
+    512,
+    512
+  ],
+  "vertices": 800,
+  "triangles": 408,
+  "target_texture_size": [
+    32,
+    32
+  ],
+  "texture_format": "RGBA16",
+  "warnings": [
+    "Base-color texture reduced to 32x32; metallic/roughness omitted."
+  ],
+  "files": {
+    "model.inc.c": "ac2e1cc0c44e9ad3a2ea1c2607c923b77ab2096af60cb28664102d42c1602dc9",
+    "header.h": "08a3febb21cd8d8ff80e6f24a751d020e22d616affc29941435771dc9be62e1d"
+  }
+}
