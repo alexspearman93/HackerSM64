@@ -1,0 +1,6 @@
+Animated Cube, copyright 2017 UX3D. Creator: Norbert Nopper.
+Released under Creative Commons Zero v1.0 Universal.
+https://creativecommons.org/publicdomain/zero/1.0/legalcode
+Source legal notice:
+https://github.com/KhronosGroup/glTF-Sample-Assets/blob/4995a638c96dbc94376d3d6164e70fee3ac7f7a2/Models/AnimatedCube/README.md
+Source glTF, binary and base-color image pinned and hashed by exporter.
