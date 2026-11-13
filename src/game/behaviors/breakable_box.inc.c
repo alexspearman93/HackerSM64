@@ -109,3 +109,17 @@ void bhv_breakable_box_loop(void) {
         create_sound_spawner(SOUND_GENERAL_BREAK_BOX);
     }
 }
+
+/* Asset Lab adapter: geometry, physical collision, and interaction stay separate. */
+void bhv_lab_crate_loop(void) {
+    static struct ObjectHitbox hitbox = { INTERACT_BREAKABLE, 0, 0, 1, 1, 150, 200, 150, 200 };
+    if (o->oBehParams2ndByte == 1) {
+        obj_set_hitbox(o, &hitbox);
+        if (cur_obj_was_attacked_or_ground_pounded()) {
+            obj_explode_and_spawn_coins(46.0f, COIN_TYPE_YELLOW);
+            create_sound_spawner(SOUND_GENERAL_BREAK_BOX);
+            return; /* Do not leave collision surfaces after deletion. */
+        }
+    }
+    load_object_collision_model();
+}
