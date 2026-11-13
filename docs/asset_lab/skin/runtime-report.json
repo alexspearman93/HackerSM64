@@ -1,0 +1,8 @@
+{
+  "samples": 598,
+  "unique_frames": 165,
+  "max_error_game_units": 4.374493857994821e-05,
+  "base_anchored": true,
+  "source": "read-only final-ROM render-pose telemetry",
+  "vertex_integer_quantization": "rendered Vtx coordinates truncate toward zero (<1 unit)"
+}
