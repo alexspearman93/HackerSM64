@@ -1,7 +1,7 @@
 from pathlib import Path
 import numpy as np
 from PIL import Image
-R=Path(__file__).resolve().parents[2];d=np.load(R/'build/asset_lab/fox/fox.npz')
+R=Path(__file__).resolve().parents[2];d=np.load(R/'build/asset_lab/fox/asset.npz')
 def arr(a):
  a=np.asarray(a)
  if a.ndim==0:return str(int(a)) if a.dtype.kind in 'iu' else f'{float(a):.7f}f'
