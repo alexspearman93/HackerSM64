@@ -1,13 +1,16 @@
 """Pinned Fox skeletal clip conversion. No ROM or baked vertex animation."""
 from pathlib import Path
-import json, struct, hashlib, urllib.request
+import json, struct, hashlib, urllib.request, argparse
+parser=argparse.ArgumentParser();parser.add_argument("--asset",choices=["fox","figure"],default="fox");args=parser.parse_args()
 import numpy as np
 R=Path(__file__).resolve().parents[2]
 PIN='4995a638c96dbc94376d3d6164e70fee3ac7f7a2'
 SHA='d97044e701822bac5a62696459b27d7b375aada5de8574ed4362edbba94771f7'
-out=R/'build/asset_lab/fox';out.mkdir(parents=True,exist_ok=True)
-p=R.parent/'vendor-fox/Fox.glb';p.parent.mkdir(exist_ok=True)
-if not p.exists():p.write_bytes(urllib.request.urlopen(f'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/{PIN}/Models/Fox/glTF-Binary/Fox.glb').read())
+name='Fox' if args.asset=='fox' else 'RiggedFigure'
+if args.asset=='figure':SHA='d6be85417d3e256861ee733eea6916093a7af7c79c16366181fd8abcaeb38cf5'
+out=R/'build/asset_lab'/args.asset;out.mkdir(parents=True,exist_ok=True)
+p=out/(name+'.glb')
+if not p.exists():p.write_bytes(urllib.request.urlopen(f'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/{PIN}/Models/{name}/glTF-Binary/{name}.glb').read())
 b=p.read_bytes();assert hashlib.sha256(b).hexdigest()==SHA
 n=struct.unpack_from('<I',b,12)[0];g=json.loads(b[20:20+n]);data=b[28+n:]
 def read(i):
@@ -26,11 +29,16 @@ def sample(times,values,t,quat):
  v=a*(1-u)+b*u
  return v/np.linalg.norm(v) if quat else v
 skin=g['skins'][0];ibm=read(skin['inverseBindMatrices']).reshape(-1,4,4).transpose(0,2,1)
-a=g['meshes'][0]['primitives'][0]['attributes'];pos=read(a['POSITION']);weights=read(a['WEIGHTS_0']);joints=read(a['JOINTS_0']).astype(int)
+primitive=g['meshes'][0]['primitives'][0];assert len(g['meshes'])==1 and len(g['meshes'][0]['primitives'])==1, 'Only one mesh primitive supported'
+assert primitive.get('mode',4)==4, 'Only triangles supported'
+a=primitive['attributes'];pos=read(a['POSITION']);weights=read(a['WEIGHTS_0']);joints=read(a['JOINTS_0']).astype(int)
 assert np.allclose(weights.sum(axis=1),1,atol=1e-5) and joints.max()<len(ibm)
+indices=read(primitive['indices']).astype(int).ravel() if 'indices' in primitive else np.arange(len(pos))
+pos=pos[indices];weights=weights[indices];joints=joints[indices]
 parents={c:i for i,v in enumerate(g['nodes']) for c in v.get('children',[])}
 clips={};report=[]
-for anim in g['animations'][:2]:
+for ai,anim in enumerate(g['animations'][:2]):
+ anim=dict(anim);anim.setdefault('name','Animation'+str(ai))
  channels=[]
  for c in anim['channels']:
   s=anim['samplers'][c['sampler']];assert s.get('interpolation','LINEAR')=='LINEAR'
@@ -52,7 +60,8 @@ for anim in g['animations'][:2]:
  poses=np.einsum('fvkac,vc,vk->fva',mats[:,joints],np.c_[pos,np.ones(len(pos))],weights)
  assert np.isfinite(poses).all()
  report.append({'name':anim['name'],'frames':frames,'duration':float(duration),'bounds_min':poses.min(axis=(0,1)).tolist(),'bounds_max':poses.max(axis=(0,1)).tolist(),'max_vertex_motion':float(np.max(np.ptp(poses,axis=0)))})
-np.savez_compressed(out/'fox.npz',positions=pos,weights=weights,joints=joints,uv=read(a['TEXCOORD_0']),**clips)
-v=g['bufferViews'][g['images'][0]['bufferView']];(out/'texture.png').write_bytes(data[v.get('byteOffset',0):v.get('byteOffset',0)+v['byteLength']])
+np.savez_compressed(out/'asset.npz',positions=pos,weights=weights,joints=joints,uv=read(a['TEXCOORD_0'])[indices] if 'TEXCOORD_0' in a else np.zeros((len(pos),2)),**clips)
+if g.get('images'):
+ v=g['bufferViews'][g['images'][0]['bufferView']];(out/'texture.png').write_bytes(data[v.get('byteOffset',0):v.get('byteOffset',0)+v['byteLength']])
 result={'source_commit':PIN,'source_sha256':SHA,'vertices':len(pos),'triangles':len(pos)//3,'joints':len(ibm),'clips':report,'runtime_verified':False,'notes':'Intermediate joint matrices; no target renderer or ROM integration yet.'}
 (out/'report.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
