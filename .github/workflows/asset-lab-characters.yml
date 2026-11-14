@@ -1,0 +1,21 @@
+name: Character conversion checks
+on:
+  push:
+    branches: [asset-lab]
+    paths: ['tools/asset_lab/**', '.github/workflows/asset-lab-characters.yml']
+  workflow_dispatch:
+jobs:
+  convert:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m pip install numpy==2.2.6 Pillow==11.1.0
+      - run: |
+          python3 tools/asset_lab/export_fox.py --asset fox
+          python3 tools/asset_lab/prepare_fox_c.py
+          python3 tools/asset_lab/export_fox.py --asset figure
+          python3 tools/asset_lab/prepare_figure_c.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: character-conversion-reports
+          path: build/asset_lab/*/report.json
