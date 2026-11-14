@@ -1,0 +1,43 @@
+{
+  "source_commit": "4995a638c96dbc94376d3d6164e70fee3ac7f7a2",
+  "source_sha256": "d97044e701822bac5a62696459b27d7b375aada5de8574ed4362edbba94771f7",
+  "vertices": 1728,
+  "triangles": 576,
+  "joints": 24,
+  "clips": [
+    {
+      "name": "Survey",
+      "frames": 103,
+      "duration": 3.4166667461395264,
+      "bounds_min": [
+        -29.89977776052666,
+        -0.13104105096044505,
+        -85.89628428071155
+      ],
+      "bounds_max": [
+        26.347761690136657,
+        79.75346847582594,
+        68.82121659926622
+      ],
+      "max_vertex_motion": 54.85270889341955
+    },
+    {
+      "name": "Walk",
+      "frames": 22,
+      "duration": 0.7083333134651184,
+      "bounds_min": [
+        -12.800638365624078,
+        -1.8188312942274472,
+        -97.64814618964925
+      ],
+      "bounds_max": [
+        13.438886649463468,
+        77.22532938695537,
+        70.18284205201255
+      ],
+      "max_vertex_motion": 54.99529347391796
+    }
+  ],
+  "runtime_verified": false,
+  "notes": "Intermediate joint matrices; no target renderer or ROM integration yet."
+}
