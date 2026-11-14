@@ -733,7 +733,7 @@ void render_hud(void) {
 #else
         create_dl_ortho_matrix();
         /* ASSET LAB HUD */
-        print_text(12, 215, "LAB 109");
+        print_text(12, 215, "LAB 110");
         print_text(20, 20, "BIND POSE     SKINNED");
         /* END ASSET LAB HUD */
 #endif
