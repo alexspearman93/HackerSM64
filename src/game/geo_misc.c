@@ -202,3 +202,7 @@ Gfx *geo_exec_cake_end_screen(s32 callContext, struct GraphNode *node, UNUSED Ma
 #ifdef ASSET_LAB_SKIN
 #include "asset_lab/fox_geo.inc.c"
 #endif
+
+#ifdef ASSET_LAB_SKIN
+#include "asset_lab/figure_geo.inc.c"
+#endif
